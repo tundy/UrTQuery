@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Drawing;
 using System.Windows.Forms;
+using UrTQuery.Properties;
 
 namespace UrTQuery
 {
@@ -17,17 +18,17 @@ namespace UrTQuery
             EX = ex;
 
             // dunno if i need this 2 things
-            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
-            this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.AutoScaleDimensions = new SizeF(6F, 13F);
+            this.AutoScaleMode = AutoScaleMode.Font;
 
             this.Name = "Error";
             this.AutoSizeMode = AutoSizeMode.GrowAndShrink;
-            this.Icon = UrTQuery.Properties.Resources.Azuresol_Sketchy_Quake_3;
+            this.Icon = Resources.Azuresol_Sketchy_Quake_3;
             this.AutoSize = true;
             this.ShowIcon = true;
             this.MaximizeBox = false;
             this.Text = "Fatal Error";
-            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedToolWindow;
+            this.FormBorderStyle = FormBorderStyle.FixedToolWindow;
 
             Button Show = new Button();
             Button Close = new Button();

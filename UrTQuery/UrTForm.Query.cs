@@ -1,9 +1,9 @@
 ﻿using QuakeQueryDll;
 using System;
-using System.ComponentModel;
+using System.Drawing;
 using System.Net;
-using System.Net.Sockets;
 using System.Windows.Forms;
+using UrTQuery.Properties;
 
 namespace UrTQuery
 {
@@ -14,8 +14,8 @@ namespace UrTQuery
         private void InitializeQuery()
         {
             Type.SelectedIndex = 0;
-            Address.Text = Properties.Settings.Default.LastIP;
-            Port.Text = Properties.Settings.Default.LastPort;
+            Address.Text = Settings.Default.LastIP;
+            Port.Text = Settings.Default.LastPort;
         }
 
         private void SetLocalhost(ref Query q, string Message)
@@ -208,16 +208,16 @@ namespace UrTQuery
             if (Type.SelectedIndex == 5 && !MOVED)
             {
                 ID.Visible = true;
-                Input.Size = new System.Drawing.Size(185, Input.Size.Height);
-                Input.Location = new System.Drawing.Point(Input.Location.X + 28, Input.Location.Y);
+                Input.Size = new Size(185, Input.Size.Height);
+                Input.Location = new Point(Input.Location.X + 28, Input.Location.Y);
                 MOVED = true;
             }
             else if (Type.SelectedIndex != 5 && MOVED)
             {
                 ID.Visible = false;
                 ID.Text = string.Empty;
-                Input.Size = new System.Drawing.Size(213, Input.Size.Height);
-                Input.Location = new System.Drawing.Point(Input.Location.X - 28, Input.Location.Y);
+                Input.Size = new Size(213, Input.Size.Height);
+                Input.Location = new Point(Input.Location.X - 28, Input.Location.Y);
                 MOVED = false;
             }
         }
