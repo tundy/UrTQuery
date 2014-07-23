@@ -34,7 +34,7 @@ namespace UrTQuery
 
         private void _ServerListDataInit()
         {
-            _ServerListData.Columns.Add("ID", typeof(int));
+            _ServerListData.Columns.Add("ID", typeof(ushort));
             _ServerListData.Columns[0].AutoIncrement = true;
             _ServerListData.Columns[0].AutoIncrementSeed = 1;
             _ServerListData.Columns[0].AutoIncrementStep = 1;
@@ -226,6 +226,13 @@ namespace UrTQuery
         {
             /*if (!info.ContainsKey("hostname"))
                 info.Add("hostname", server.IP.ToString());*/
+            try
+            {
+                info["gametype"] = GameModes.LongNames[info["gametype"]];
+            }
+            catch
+            {
+            }
 
             _ServerListData.BeginInit();
             try
