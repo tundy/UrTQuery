@@ -1,7 +1,9 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 2012
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UrTQuery", "UrTQuery\UrTQuery.csproj", "{6B6951F5-EB0D-4B4A-9F2B-D2AE37AE9C5B}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UrTQuery", "UrTQuery\UrTQuery.csproj", "{25D722AD-62CA-4A6D-8994-605B0F3E5567}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "QuakeQueryDll", "..\QuakeQueryDll\QuakeQueryDll\QuakeQueryDll.csproj", "{EC3B2F45-4518-427F-A1B2-89D9605AE9D3}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -9,10 +11,14 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{6B6951F5-EB0D-4B4A-9F2B-D2AE37AE9C5B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{6B6951F5-EB0D-4B4A-9F2B-D2AE37AE9C5B}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{6B6951F5-EB0D-4B4A-9F2B-D2AE37AE9C5B}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{6B6951F5-EB0D-4B4A-9F2B-D2AE37AE9C5B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{25D722AD-62CA-4A6D-8994-605B0F3E5567}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{25D722AD-62CA-4A6D-8994-605B0F3E5567}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{25D722AD-62CA-4A6D-8994-605B0F3E5567}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{25D722AD-62CA-4A6D-8994-605B0F3E5567}.Release|Any CPU.Build.0 = Release|Any CPU
+		{EC3B2F45-4518-427F-A1B2-89D9605AE9D3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{EC3B2F45-4518-427F-A1B2-89D9605AE9D3}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{EC3B2F45-4518-427F-A1B2-89D9605AE9D3}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{EC3B2F45-4518-427F-A1B2-89D9605AE9D3}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

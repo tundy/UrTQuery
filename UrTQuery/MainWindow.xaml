@@ -1,0 +1,156 @@
+﻿<Window x:Class="UrTQueryWpf.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:src="clr-namespace:UrTQueryWpf"
+        Title="UrTQuery" Width="800" Height="600" MinWidth="800" MinHeight="600" WindowStartupLocation="CenterScreen" Closing="MainWindow_Closing">
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="35*"/>
+            <ColumnDefinition Width="37*"/>
+        </Grid.ColumnDefinitions>
+        <TabControl Name="Tabs" Margin="0,0,0,0" FontFamily="Arial" FontSize="12" Grid.ColumnSpan="2">
+            <TabItem Header="Query Page">
+                <Grid Background="White">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="40*" />
+                        <ColumnDefinition Width="60*" />
+                    </Grid.ColumnDefinitions>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="25"/>
+                        <RowDefinition Height="25"/>
+                        <RowDefinition Height="*"/>
+                    </Grid.RowDefinitions>
+                    <StackPanel Orientation="Horizontal" Grid.Row="0" Grid.Column="0" HorizontalAlignment="Left">
+                        <Label Content="Ip Address:" VerticalContentAlignment="Center"/>
+                        <TextBox Name="Address" HorizontalAlignment="Left" TextWrapping="NoWrap" Width="120" Margin="0,2" TextChanged="NoSpaces_TextChanged" VerticalContentAlignment="Center" Background="White" />
+                        <Label Content="Port:" VerticalContentAlignment="Center"/>
+                        <TextBox Name="Port" HorizontalAlignment="Left" TextWrapping="NoWrap" Margin="0,2" Width="45" MaxLength="5" TextChanged="Port_TextChanged" VerticalContentAlignment="Center" Background="White" />
+                    </StackPanel>
+                    <StackPanel Orientation="Horizontal" Grid.Row="0" Grid.Column="1" HorizontalAlignment="Right">
+                        <Label Content="RCON Password:"/>
+                        <src:PasswordTextBox x:Name="Rcon" HorizontalAlignment="Left" Width="120" Margin="0,2" Height="auto" BoxBackground="White" />
+                        <CheckBox Name="ShowRcon" Content="Show Password" VerticalAlignment="Center" Margin="5,0,0,0" Checked="ShowRcon_Checked" Unchecked="ShowRcon_Unchecked" />
+                        <Button Name="TestPassword" Content="Test Password" Margin="5,2,2,2" Padding="5,1" Click="TestPassword_Click" >
+                            <Button.Background>
+                                <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+                                    <GradientStop Color="White" Offset="0"/>
+                                    <GradientStop Color="LightGray" Offset="1"/>
+                                </LinearGradientBrush>
+                            </Button.Background>
+                        </Button>
+                    </StackPanel>
+                    <StackPanel Orientation="Horizontal" Grid.Row="1" Grid.Column="0" HorizontalAlignment="Left">
+                        <Button Name="GetStatus" Content="Get Status" Margin="5,2" Padding="5,1" Click="GetStatus_Click" >
+                            <Button.Background>
+                                <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+                                    <GradientStop Color="White" Offset="0"/>
+                                    <GradientStop Color="LightGray" Offset="1"/>
+                                </LinearGradientBrush>
+                            </Button.Background>
+                        </Button>
+                        <Button Name="GetInfo" Content="Get Info" Margin="5,2" Padding="5,1" Click="GetInfo_Click" >
+                            <Button.Background>
+                                <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+                                    <GradientStop Color="White" Offset="0"/>
+                                    <GradientStop Color="LightGray" Offset="1"/>
+                                </LinearGradientBrush>
+                            </Button.Background>
+                        </Button>
+                        <Button Name="RconStatus" Content="Rcon Status" Margin="5,2" Padding="5,1" Click="RconStatus_Click" >
+                            <Button.Background>
+                                <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+                                    <GradientStop Color="White" Offset="0"/>
+                                    <GradientStop Color="LightGray" Offset="1"/>
+                                </LinearGradientBrush>
+                            </Button.Background>
+                        </Button>
+                    </StackPanel>
+                    <StackPanel Orientation="Horizontal" Grid.Row="1" Grid.Column="1" HorizontalAlignment="Right">
+                        <ComboBox Name="Combo" IsEditable="True" IsReadOnly="True" Text="Send raw Data" Margin="5,2" Padding="5,1" Width="150" SelectionChanged="Combo_SelectionChanged" VerticalContentAlignment="Center" >
+                            <ComboBoxItem Content="RCON Command" />
+                            <ComboBoxItem Content="Console Message" />
+                            <ComboBoxItem Content="Say Message" />
+                            <ComboBoxItem Content="Send raw Data" />
+                            <ComboBoxItem Content="Big Text Message" />
+                            <ComboBoxItem Content="Private Message" />
+                            <!--ComboBoxItem Content="Get Cvar Value" /-->
+                        </ComboBox>
+                        <TextBox Name="ID" HorizontalAlignment="Left" TextWrapping="NoWrap" Width="25" MaxLength="2" Margin="0,2" Visibility="Collapsed" Background="White" />
+                        <TextBox Name="Input" HorizontalAlignment="Left" TextWrapping="NoWrap" Margin="0,2" Width="205" KeyUp="Input_KeyUp" Background="White" />
+                        <Button Name="Send" Content="Send" Margin="2,2" Padding="5,1" Click="Send_Click" >
+                            <Button.Background>
+                                <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+                                    <GradientStop Color="White" Offset="0"/>
+                                    <GradientStop Color="LightGray" Offset="1"/>
+                                </LinearGradientBrush>
+                            </Button.Background>
+                        </Button>
+                        <Button Name="Clear" Content="Clear" Margin="2,2" Padding="5,1" Click="Clear_Click" >
+                            <Button.Background>
+                                <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+                                    <GradientStop Color="White" Offset="0"/>
+                                    <GradientStop Color="LightGray" Offset="1"/>
+                                </LinearGradientBrush>
+                            </Button.Background>
+                        </Button>
+                    </StackPanel>
+                    <TextBox FontFamily="Courier New" Name="Output" Grid.Row="2" Grid.ColumnSpan="2" IsReadOnly="True" TextWrapping="WrapWithOverflow" UndoLimit="0" VerticalScrollBarVisibility="Visible" Background="LightGoldenrodYellow" />
+                </Grid>
+            </TabItem>
+            <TabItem Header="Server List">
+                <!--TabItem.Header>
+                    <StackPanel Orientation="Horizontal">
+                        <src:GifImage Height="16" Width="16" Source="pack://siteoforigin:,,,/Resources/loading.gif" Cursor="Wait" />
+                        <Label Content="Server List" />
+                    </StackPanel>
+                </TabItem.Header-->
+                <Grid Background="#FFE5E5E5">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="50*"/>
+                        <ColumnDefinition Width="50*"/>
+                    </Grid.ColumnDefinitions>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="25"/>
+                        <RowDefinition Height="*"/>
+                    </Grid.RowDefinitions>
+                    <StackPanel Orientation="Horizontal" Grid.Row="0" Grid.Column="0" HorizontalAlignment="Left">
+                        <Button Name="GetNewList" Content="Get New List" Margin="2,2" Padding="5,1" Click="GetNewList_Click" >
+                            <Button.Background>
+                                <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+                                    <GradientStop Color="White" Offset="0"/>
+                                    <GradientStop Color="LightGray" Offset="1"/>
+                                </LinearGradientBrush>
+                            </Button.Background>
+                        </Button>
+                        <Button Name="Refresh" Content="Refresh" Margin="2,2" Padding="5,1" Click="Refresh_Click" >
+                            <Button.Background>
+                                <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+                                    <GradientStop Color="White" Offset="0"/>
+                                    <GradientStop Color="LightGray" Offset="1"/>
+                                </LinearGradientBrush>
+                            </Button.Background>
+                        </Button>
+                    </StackPanel>
+                    <StackPanel Orientation="Horizontal" Grid.Row="0" Grid.Column="1" HorizontalAlignment="Right">
+                        <Label Content="Done:"/>
+                        <TextBox Text="0" Name="Done" HorizontalAlignment="Left" TextWrapping="NoWrap" Margin="0,2,5,2" Width="45" MaxLength="4" VerticalContentAlignment="Center" Background="White" />
+                        <Label Content="Pending:"/>
+                        <TextBox Text="0" Name="Pending" HorizontalAlignment="Left" TextWrapping="NoWrap" Margin="0,2,5,2" Width="45" MaxLength="4" VerticalContentAlignment="Center" Background="White" />
+                        <Label Content="Total:"/>
+                        <TextBox Text="0" Name="Total" HorizontalAlignment="Left" TextWrapping="NoWrap" Margin="0,2,5,2" Width="45" MaxLength="4" VerticalContentAlignment="Center" Background="White" />
+                    </StackPanel>
+                    <DataGrid FontSize="14" Name="_ServerListDataGrid" Grid.Column="0" Grid.Row="1" Grid.ColumnSpan="2" IsReadOnly="True" AutoGenerateColumns="True" MouseDoubleClick="_ServerListDataGrid_MouseDoubleClick" SelectionMode="Single">
+                        <DataGrid.ContextMenu>
+                            <ContextMenu >
+                                <MenuItem Header="Update Info" Click="Info_RightClick" />
+                                <MenuItem Header="Get Status" Click="Status_RightClick" />
+                            </ContextMenu>
+                        </DataGrid.ContextMenu>
+                    </DataGrid>
+                </Grid>
+            </TabItem>
+            <!--TabItem Header="Favorites">
+            </TabItem-->
+        </TabControl>
+    </Grid>
+</Window>

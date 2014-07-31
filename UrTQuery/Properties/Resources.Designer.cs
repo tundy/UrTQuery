@@ -8,7 +8,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace UrTQuery.Properties {
+namespace UrTQueryWpf.Properties {
     using System;
     
     
@@ -39,7 +39,7 @@ namespace UrTQuery.Properties {
         internal static global::System.Resources.ResourceManager ResourceManager {
             get {
                 if (object.ReferenceEquals(resourceMan, null)) {
-                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("UrTQuery.Properties.Resources", typeof(Resources).Assembly);
+                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("UrTQueryWpf.Properties.Resources", typeof(Resources).Assembly);
                     resourceMan = temp;
                 }
                 return resourceMan;
@@ -57,16 +57,6 @@ namespace UrTQuery.Properties {
             }
             set {
                 resourceCulture = value;
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized resource of type System.Drawing.Icon similar to (Icon).
-        /// </summary>
-        internal static System.Drawing.Icon Azuresol_Sketchy_Quake_3 {
-            get {
-                object obj = ResourceManager.GetObject("Azuresol_Sketchy_Quake_3", resourceCulture);
-                return ((System.Drawing.Icon)(obj));
             }
         }
     }

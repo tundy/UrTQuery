@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace UrTQuery
+namespace UrTQueryWpf
 {
     public static class GameModes
     {
@@ -52,4 +52,5 @@ namespace UrTQuery
         {Jump.ToString(), "Jump"},
         };
     }
+
 }

@@ -1,4 +1,2 @@
-Maybe async Comunication;
 New window with Online Players, ScoreBoard etc;
 New window with Server Settings;
-Server List window;
