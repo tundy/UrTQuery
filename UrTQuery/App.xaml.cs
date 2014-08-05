@@ -7,7 +7,7 @@ namespace UrTQueryWpf
     /// <summary>
     /// Interaction logic for App.xaml
     /// </summary>
-    public partial class App : Application
+    public partial class App
     {
         private void Application_Startup(object sender, StartupEventArgs e)
         {
@@ -17,12 +17,12 @@ namespace UrTQueryWpf
             if (!File.Exists("QuakeQueryDll.dll"))
             {
                 MessageBox.Show("Quake Query Dll not found !", "Missing Dll", MessageBoxButton.OK, MessageBoxImage.Error);
-                this.Shutdown(-1);
+                Shutdown(-1);
             }
             else if (FileVersionInfo.GetVersionInfo("QuakeQueryDll.dll").ProductVersion.CompareTo("3.4.2.0") < 0)
             {
                 MessageBox.Show("Quake Query Dll is too old !", "Wrong version", MessageBoxButton.OK, MessageBoxImage.Error);
-                this.Shutdown(-1);
+                Shutdown(-1);
             }
             else
             {

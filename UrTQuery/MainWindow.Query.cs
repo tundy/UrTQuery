@@ -3,7 +3,6 @@ using System;
 using System.Data;
 using System.Linq;
 using System.Net;
-using System.Net.NetworkInformation;
 using System.Net.Sockets;
 using System.Windows;
 using System.Windows.Controls;
@@ -13,61 +12,57 @@ namespace UrTQueryWpf
 {
     public partial class MainWindow
     {
-        private QuakeQuery _MainQuery = new QuakeQuery();
+        private readonly QuakeQuery _mainQuery = new QuakeQuery();
         private IPAddress _ip;
         private ushort _port;
 
         void _MainQuery_serverResponseEvent(Server sender)
         {
-            this.Dispatcher.Invoke((Action)(() =>
+            Dispatcher.Invoke(() =>
             {
-                if (sender.IP.Equals(_ip) && sender.Port.Equals(_port))
+                if (sender.Ip.Equals(_ip.MapToIPv4().ToString()) && sender.Port.Equals(_port))
                 {
                     Output.Focus();
                     Output.ScrollToEnd();
                 }
-                var FoundRow = _ServerListDataTable.Rows.Find(new object[] { sender.IP.ToString(), sender.Port });
-                if (FoundRow != null)
+                var foundRow = _serverListDataTable.Rows.Find(new object[] { sender.Ip, sender.Port });
+                if (foundRow != null)
                 {
-                    FoundRow[9] = (ushort)((sender.LastRecvTime - sender.LastSendTime).TotalMilliseconds);
+                    foundRow[9] = (ushort)((sender.LastRecvTime - sender.LastSendTime).TotalMilliseconds);
                 }
-            }));
+            });
         }
         void _MainQuery_printResponseEvent(Server sender)
         {
-            this.Dispatcher.Invoke((Action)(() =>
+            Dispatcher.Invoke(() =>
             {
-                if (sender.IP.Equals(_ip.ToString()) && sender.Port.Equals(_port))
-                {
-                    Output.AppendText(Environment.NewLine);
-                    Output.AppendText(sender.ToString() + Environment.NewLine);
-                    Output.AppendText(sender.Response);
-                    Output.AppendText(Environment.NewLine);
-                }
-            }));
+                if (!sender.Ip.Equals(_ip.MapToIPv4().ToString()) || !sender.Port.Equals(_port)) return;
+                Output.AppendText(Environment.NewLine);
+                Output.AppendText(sender.ToString() + Environment.NewLine);
+                Output.AppendText(sender.Response);
+                Output.AppendText(Environment.NewLine);
+            });
         }
         void _MainQuery_statusResponseEvent(Server sender)
         {
-            this.Dispatcher.Invoke((Action)(() =>
+            Dispatcher.Invoke(() =>
             {
-                if (sender.IP.Equals(_ip.ToString()) && sender.Port.Equals(_port))
+                if (!sender.Ip.Equals(_ip.MapToIPv4().ToString()) || !sender.Port.Equals(_port)) return;
+                Output.AppendText(Environment.NewLine);
+                Output.AppendText(sender.ToString() + Environment.NewLine);
+                foreach (var data in sender.Status.ToList())
                 {
-                    Output.AppendText(Environment.NewLine);
-                    Output.AppendText(sender.ToString() + Environment.NewLine);
-                    foreach (var data in sender.Status.ToList())
-                    {
-                        Output.AppendText(data.Key + ": " + data.Value);
-                        Output.AppendText(Environment.NewLine);
-                    }
+                    Output.AppendText(data.Key + ": " + data.Value);
                     Output.AppendText(Environment.NewLine);
                 }
-            }));
+                Output.AppendText(Environment.NewLine);
+            });
         }
         void _MainQuery_infoResponseEvent(Server sender)
         {
-            this.Dispatcher.Invoke((Action)(() =>
+            Dispatcher.Invoke(() =>
             {
-                if (sender.IP.Equals(_ip.ToString()) && sender.Port.Equals(_port))
+                if (sender.Ip.Equals(_ip.MapToIPv4().ToString()) && sender.Port.Equals(_port))
                 {
                     Output.AppendText(Environment.NewLine);
                     Output.AppendText(sender.ToString() + Environment.NewLine);
@@ -80,22 +75,19 @@ namespace UrTQueryWpf
                 }
 
                 if (!sender.Info.ContainsKey("hostname"))
-                    sender.Info["hostname"] = sender.IP.ToString();
+                    sender.Info["hostname"] = sender.Ip;
 
-                try
+                if (GameModes.LongNames.ContainsKey(sender.Info["gametype"]))
                 {
                     var tmp = GameModes.LongNames[sender.Info["gametype"]];
                     sender.Info["gametype"] = tmp;
-                }
-                catch
-                {
                 }
                 
                 if (sender.Info["game"].Equals("q3ut4"))
                 {
                     try
                     {
-                        _ServerListDataTable.Rows.Add(
+                        _serverListDataTable.Rows.Add(
                             null,
                             sender.Info["modversion"],
                             sender.Info["hostname"],
@@ -103,41 +95,41 @@ namespace UrTQueryWpf
                             sender.Info["gametype"],
                             sender.Info["clients"],
                             sender.Info["sv_maxclients"],
-                            sender.IP.ToString(),
+                            sender.Ip,
                             sender.Port,
                             (ushort)((sender.LastRecvTime - sender.LastSendTime).TotalMilliseconds)
                             );
                     }
                     catch (ConstraintException)
                     {
-                        var FoundRow = _ServerListDataTable.Rows.Find(new object[] { sender.IP.ToString(), sender.Port });
-                        if (FoundRow != null)
+                        var foundRow = _serverListDataTable.Rows.Find(new object[] { sender.Ip, sender.Port });
+                        if (foundRow != null)
                         {
-                            FoundRow[1] = sender.Info["modversion"];
-                            FoundRow[2] = sender.Info["hostname"];
-                            FoundRow[3] = sender.Info["mapname"];
-                            FoundRow[4] = sender.Info["gametype"];
-                            FoundRow[5] = sender.Info["clients"];
-                            FoundRow[6] = sender.Info["sv_maxclients"];
-                            FoundRow[9] = (ushort)((sender.LastRecvTime - sender.LastSendTime).TotalMilliseconds);
+                            foundRow[1] = sender.Info["modversion"];
+                            foundRow[2] = sender.Info["hostname"];
+                            foundRow[3] = sender.Info["mapname"];
+                            foundRow[4] = sender.Info["gametype"];
+                            foundRow[5] = sender.Info["clients"];
+                            foundRow[6] = sender.Info["sv_maxclients"];
+                            foundRow[9] = (ushort)((sender.LastRecvTime - sender.LastSendTime).TotalMilliseconds);
                         }
                     }
                 }
                 _tmpServers.Remove(sender.ToString());
 
                 UpdateStatus();
-            }));
+            });
         }
 
 
-        private void SetLocalhost(string Message)
+        private void SetLocalhost(string message)
         {
             Address.Text = "127.0.0.1";
             _ip = IPAddress.Parse("127.0.0.1");
-            Message += Environment.NewLine + "Address is set to the Default value 127.0.0.1";
-            MessageBox.Show(Message, "Default IP Adress", MessageBoxButton.OK, MessageBoxImage.Exclamation);
+            message += Environment.NewLine + "Address is set to the Default value 127.0.0.1";
+            MessageBox.Show(message, "Default IP Adress", MessageBoxButton.OK, MessageBoxImage.Exclamation);
         }
-        private void CheckIP()
+        private void CheckIp()
         {
             if (Address.Text.Length == 0)
             {
@@ -151,8 +143,8 @@ namespace UrTQueryWpf
                 }
                 catch (FormatException)
                 {
-                    string Message = "Wrong Address format" + Environment.NewLine;
-                    Message += "Attempt to get IP from Domain" + Environment.NewLine;
+                    var message = "Wrong Address format" + Environment.NewLine;
+                    message += "Attempt to get IP from Domain" + Environment.NewLine;
                     try
                     {
                         _ip = Dns.GetHostAddresses(Address.Text)[0];
@@ -163,18 +155,18 @@ namespace UrTQueryWpf
                     }
                     catch
                     {
-                        Message += "Unable to get IP Address from Domain";
-                        SetLocalhost(Message);
+                        message += "Unable to get IP Address from Domain";
+                        SetLocalhost(message);
                     }
                 }
             }
         }
-        private void SetLocalPort(string Message)
+        private void SetLocalPort(string message)
         {
             Port.Text = "27960";
             _port = 27960;
-            Message += Environment.NewLine + "Port is set to the Default value 27960";
-            MessageBox.Show(Message, "Default Port Number", MessageBoxButton.OK, MessageBoxImage.Exclamation);
+            message += Environment.NewLine + "Port is set to the Default value 27960";
+            MessageBox.Show(message, "Default Port Number", MessageBoxButton.OK, MessageBoxImage.Exclamation);
         }
         private void CheckPort()
         {
@@ -200,15 +192,8 @@ namespace UrTQueryWpf
         }
         private void CheckIpPort()
         {
-            CheckIP();
+            CheckIp();
             CheckPort();
-        }
-        private void AppendText(string text)
-        {
-            Output.AppendText(text + Environment.NewLine);
-            Output.Focus();
-            Output.CaretIndex = Output.Text.Length;
-            Output.ScrollToEnd();
         }
 
         private void Send_Click(object sender, RoutedEventArgs e)
@@ -217,28 +202,28 @@ namespace UrTQueryWpf
             switch (Combo.SelectedIndex)
             {
                 case (0):
-                    _MainQuery.Rcon(Rcon.Password, Input.Text, _ip, _port);
+                    _mainQuery.Rcon(Rcon.Password, Input.Text, _ip, _port);
                     break;
                 case (1):
-                    _MainQuery.Print(Rcon.Password, Input.Text, _ip, _port);
+                    _mainQuery.Print(Rcon.Password, Input.Text, _ip, _port);
                     break;
                 case (2):
-                    _MainQuery.Say(Rcon.Password, Input.Text, _ip, _port);
+                    _mainQuery.Say(Rcon.Password, Input.Text, _ip, _port);
                     break;
                 case (3):
-                    _MainQuery.Send(Input.Text, _ip, _port);
+                    _mainQuery.Send(Input.Text, _ip, _port);
                     break;
                 case (4):
-                    _MainQuery.BigText(Rcon.Password, Input.Text, _ip, _port);
+                    _mainQuery.BigText(Rcon.Password, Input.Text, _ip, _port);
                     break;
                 case (5):
-                    _MainQuery.PM(Rcon.Password, ID.Text, Input.Text, _ip, _port);
+                    _mainQuery.PM(Rcon.Password, ID.Text, Input.Text, _ip, _port);
                     break;
                 /*case (6):
                     _MainQuery.GetCvar(Rcon.Password, Input.Text, _ip, _port);
                     break;*/
                 default:
-                    _MainQuery.Send(Input.Text, _ip, _port);
+                    _mainQuery.Send(Input.Text, _ip, _port);
                     break;
             }
         }
@@ -249,23 +234,23 @@ namespace UrTQueryWpf
         private void GetStatus_Click(object sender, RoutedEventArgs e)
         {
             CheckIpPort();
-            _MainQuery.GetStatus(_ip, _port);
+            _mainQuery.GetStatus(_ip, _port);
         }
         private void GetInfo_Click(object sender, RoutedEventArgs e)
         {
             CheckIpPort();
-            _MainQuery.GetInfo(_ip, _port);
+            _mainQuery.GetInfo(_ip, _port);
         }
         private void RconStatus_Click(object sender, RoutedEventArgs e)
         {
             CheckIpPort();
-            _MainQuery.Rcon(Rcon.Password, "status", _ip, _port);
+            _mainQuery.Rcon(Rcon.Password, "status", _ip, _port);
         }
         private void TestPassword_Click(object sender, RoutedEventArgs e)
         {
 
             CheckIpPort();
-            _MainQuery.Rcon(Rcon.Password, "echo \"Good rconpassword.\"", _ip, _port);
+            _mainQuery.Rcon(Rcon.Password, "echo \"Good rconpassword.\"", _ip, _port);
         }
 
         private void Combo_SelectionChanged(object sender, SelectionChangedEventArgs e)
@@ -303,7 +288,7 @@ namespace UrTQueryWpf
 
         private void Port_TextChanged(object sender, TextChangedEventArgs e)
         {
-            ((TextBox)sender).Text = new string(((TextBox)sender).Text.Where(c => char.IsDigit(c)).ToArray());
+            ((TextBox)sender).Text = new string(((TextBox)sender).Text.Where(char.IsDigit).ToArray());
         }
     }
 }

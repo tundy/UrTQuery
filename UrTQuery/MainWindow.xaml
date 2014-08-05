@@ -139,7 +139,7 @@
                         <Label Content="Total:"/>
                         <TextBox Text="0" Name="Total" HorizontalAlignment="Left" TextWrapping="NoWrap" Margin="0,2,5,2" Width="45" MaxLength="4" VerticalContentAlignment="Center" Background="White" />
                     </StackPanel>
-                    <DataGrid FontSize="14" Name="_ServerListDataGrid" Grid.Column="0" Grid.Row="1" Grid.ColumnSpan="2" IsReadOnly="True" AutoGenerateColumns="True" MouseDoubleClick="_ServerListDataGrid_MouseDoubleClick" SelectionMode="Single">
+                    <DataGrid FontSize="14" Name="_serverListDataGrid" Grid.Column="0" Grid.Row="1" Grid.ColumnSpan="2" IsReadOnly="True" AutoGenerateColumns="True" MouseDoubleClick="_ServerListDataGrid_MouseDoubleClick" SelectionMode="Single">
                         <DataGrid.ContextMenu>
                             <ContextMenu >
                                 <MenuItem Header="Update Info" Click="Info_RightClick" />

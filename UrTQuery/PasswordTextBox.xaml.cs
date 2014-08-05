@@ -8,22 +8,20 @@ namespace UrTQueryWpf
     /// <summary>
     /// Interaction logic for PasswordTextBox.xaml
     /// </summary>
-    public partial class PasswordTextBox : UserControl
+    public partial class PasswordTextBox
     {
         //public delegate void EventHandler(object sender, EventArgs e);
         public event EventHandler PasswordChanged;
 
-        private bool _showpassword = false;
+        private bool _showpassword;
         private string _password = string.Empty;
         public string Password
         {
             get { return _password; }
             set
             {
-                if (value != _password)
-                {
-                    _password = value; PasswordShowed.Text = value; PasswordHidden.Password = value;
-                }
+                if (value == _password) return;
+                _password = value; PasswordShowed.Text = value; PasswordHidden.Password = value;
             }
         }
         public Brush BoxBackground
