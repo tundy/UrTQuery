@@ -24,7 +24,7 @@
                         <Label Content="Ip Address:" VerticalContentAlignment="Center"/>
                         <TextBox Name="Address" HorizontalAlignment="Left" TextWrapping="NoWrap" Width="120" Margin="0,2" TextChanged="NoSpaces_TextChanged" VerticalContentAlignment="Center" Background="White" />
                         <Label Content="Port:" VerticalContentAlignment="Center"/>
-                        <TextBox Name="Port" HorizontalAlignment="Left" TextWrapping="NoWrap" Margin="0,2" Width="45" MaxLength="5" TextChanged="Port_TextChanged" VerticalContentAlignment="Center" Background="White" />
+                        <TextBox Name="TextBoxPort" HorizontalAlignment="Left" TextWrapping="NoWrap" Margin="0,2" Width="45" MaxLength="5" TextChanged="Port_TextChanged" VerticalContentAlignment="Center" Background="White" />
                     </StackPanel>
                     <StackPanel Orientation="Horizontal" Grid.Row="0" Grid.Column="1" HorizontalAlignment="Right">
                         <Label Content="RCON Password:"/>
@@ -94,7 +94,8 @@
                             </Button.Background>
                         </Button>
                     </StackPanel>
-                    <TextBox FontFamily="Courier New" Name="Output" Grid.Row="2" Grid.ColumnSpan="2" IsReadOnly="True" TextWrapping="WrapWithOverflow" UndoLimit="0" VerticalScrollBarVisibility="Visible" Background="LightGoldenrodYellow" />
+                    <TextBox FontFamily="Courier New" Name="Output" Grid.Row="2" Grid.ColumnSpan="2" Grid.Column="0"
+                             IsReadOnly="True" TextWrapping="WrapWithOverflow" UndoLimit="0" VerticalScrollBarVisibility="Visible" Background="LightGoldenrodYellow" />
                 </Grid>
             </TabItem>
             <TabItem Header="Server List">
@@ -139,7 +140,7 @@
                         <Label Content="Total:"/>
                         <TextBox Text="0" Name="Total" HorizontalAlignment="Left" TextWrapping="NoWrap" Margin="0,2,5,2" Width="45" MaxLength="4" VerticalContentAlignment="Center" Background="White" />
                     </StackPanel>
-                    <DataGrid FontSize="14" Name="_serverListDataGrid" Grid.Column="0" Grid.Row="1" Grid.ColumnSpan="2" IsReadOnly="True" AutoGenerateColumns="True" MouseDoubleClick="_ServerListDataGrid_MouseDoubleClick" SelectionMode="Single">
+                    <DataGrid FontSize="14" Name="ServerListDataGrid" Grid.Column="0" Grid.Row="1" Grid.ColumnSpan="2" IsReadOnly="True" AutoGenerateColumns="True" MouseDoubleClick="_ServerListDataGrid_MouseDoubleClick" SelectionMode="Single">
                         <DataGrid.ContextMenu>
                             <ContextMenu >
                                 <MenuItem Header="Update Info" Click="Info_RightClick" />

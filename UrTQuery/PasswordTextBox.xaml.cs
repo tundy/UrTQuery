@@ -78,7 +78,7 @@ namespace UrTQueryWpf
 
         protected virtual void OnPasswordChange(EventArgs e)
         {
-            EventHandler handler = PasswordChanged;
+            var handler = PasswordChanged;
             if (handler != null)
             {
                 handler(this, e);

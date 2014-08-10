@@ -1,4 +1,5 @@
-﻿using QuakeQueryDll;
+﻿using System.Globalization;
+using QuakeQueryDll;
 using System;
 using System.Data;
 using System.Linq;
@@ -13,18 +14,73 @@ namespace UrTQueryWpf
     public partial class MainWindow
     {
         private readonly QuakeQuery _mainQuery = new QuakeQuery();
-        private IPAddress _ip;
-        private ushort _port;
+
+        internal IPAddress Ip
+        {
+            get
+            {
+                if (Address.Text.Length == 0)
+                {
+                    SetLocalAddress("Server Address was not set");
+                    return Ip;
+                }
+                try
+                {
+                    return IPAddress.Parse(Address.Text);
+                }
+                catch (FormatException)
+                {
+                    var message = "Wrong Address format" + Environment.NewLine;
+                    message += "Attempt to get IP from Domain" + Environment.NewLine;
+                    try
+                    {
+                        var tmp = Dns.GetHostAddresses(Address.Text)[0];
+                        if (tmp.AddressFamily == AddressFamily.InterNetworkV6)
+                            tmp = tmp.MapToIPv4();
+                        return tmp;
+                    }
+                    catch
+                    {
+                        message += "Unable to get IP Address from Domain";
+                        SetLocalAddress(message);
+                        return Ip;
+                    }
+                }
+            }
+            set { Address.Text = value.ToString(); }
+        }
+
+        internal ushort Port
+        {
+            get
+            {
+                if (TextBoxPort.Text.Length == 0)
+                {
+                    SetLocalPort("Port number was not set");
+                    return Port;
+                }
+                try
+                {
+                    return ushort.Parse(TextBoxPort.Text);
+                }
+                catch (OverflowException)
+                {
+                    SetLocalPort("Port value has to be between 0 and 65536");
+                    return Port;
+                }
+                catch (FormatException)
+                {
+                    SetLocalPort("Port has to be Number");
+                    return Port;
+                }
+            }
+            set { TextBoxPort.Text = value.ToString(CultureInfo.InvariantCulture); }
+        }
 
         void _MainQuery_serverResponseEvent(Server sender)
         {
             Dispatcher.Invoke(() =>
             {
-                if (sender.Ip.Equals(_ip.MapToIPv4().ToString()) && sender.Port.Equals(_port))
-                {
-                    Output.Focus();
-                    Output.ScrollToEnd();
-                }
                 var foundRow = _serverListDataTable.Rows.Find(new object[] { sender.Ip, sender.Port });
                 if (foundRow != null)
                 {
@@ -36,18 +92,27 @@ namespace UrTQueryWpf
         {
             Dispatcher.Invoke(() =>
             {
-                if (!sender.Ip.Equals(_ip.MapToIPv4().ToString()) || !sender.Port.Equals(_port)) return;
+                if (!sender.Ip.Equals(Ip.ToString()) || !sender.Port.Equals(Port)) return;
+                var lastFocusedItem = FocusManager.GetFocusedElement(this);
+                var wasScrolledToEnd = Output.VerticalOffset + Output.ViewportHeight >= Output.ExtentHeight;
+                Output.Focus();
                 Output.AppendText(Environment.NewLine);
                 Output.AppendText(sender.ToString() + Environment.NewLine);
                 Output.AppendText(sender.Response);
                 Output.AppendText(Environment.NewLine);
+                if (wasScrolledToEnd)
+                    Output.ScrollToEnd();
+                lastFocusedItem.Focus();
             });
         }
         void _MainQuery_statusResponseEvent(Server sender)
         {
             Dispatcher.Invoke(() =>
             {
-                if (!sender.Ip.Equals(_ip.MapToIPv4().ToString()) || !sender.Port.Equals(_port)) return;
+                if (!sender.Ip.Equals(Ip.ToString()) || !sender.Port.Equals(Port)) return;
+                var lastFocusedItem = FocusManager.GetFocusedElement(this);
+                var wasScrolledToEnd = Output.VerticalOffset + Output.ViewportHeight >= Output.ExtentHeight;
+                Output.Focus();
                 Output.AppendText(Environment.NewLine);
                 Output.AppendText(sender.ToString() + Environment.NewLine);
                 foreach (var data in sender.Status.ToList())
@@ -56,14 +121,20 @@ namespace UrTQueryWpf
                     Output.AppendText(Environment.NewLine);
                 }
                 Output.AppendText(Environment.NewLine);
+                if (wasScrolledToEnd)
+                    Output.ScrollToEnd();
+                lastFocusedItem.Focus();
             });
         }
         void _MainQuery_infoResponseEvent(Server sender)
         {
             Dispatcher.Invoke(() =>
             {
-                if (sender.Ip.Equals(_ip.MapToIPv4().ToString()) && sender.Port.Equals(_port))
+                if (sender.Ip.Equals(Ip.ToString()) && sender.Port.Equals(Port))
                 {
+                    var lastFocusedItem = FocusManager.GetFocusedElement(this);
+                    var wasScrolledToEnd = Output.VerticalOffset + Output.ViewportHeight >= Output.ExtentHeight;
+                    Output.Focus();
                     Output.AppendText(Environment.NewLine);
                     Output.AppendText(sender.ToString() + Environment.NewLine);
                     foreach (var data in sender.Info.ToList())
@@ -72,6 +143,9 @@ namespace UrTQueryWpf
                         Output.AppendText(Environment.NewLine);
                     }
                     Output.AppendText(Environment.NewLine);
+                    if (wasScrolledToEnd)
+                        Output.ScrollToEnd();
+                    lastFocusedItem.Focus();
                 }
 
                 if (!sender.Info.ContainsKey("hostname"))
@@ -122,108 +196,46 @@ namespace UrTQueryWpf
         }
 
 
-        private void SetLocalhost(string message)
+        private void SetLocalAddress(string message)
         {
-            Address.Text = "127.0.0.1";
-            _ip = IPAddress.Parse("127.0.0.1");
+            Ip = IPAddress.Parse("127.0.0.1");
             message += Environment.NewLine + "Address is set to the Default value 127.0.0.1";
             MessageBox.Show(message, "Default IP Adress", MessageBoxButton.OK, MessageBoxImage.Exclamation);
         }
-        private void CheckIp()
-        {
-            if (Address.Text.Length == 0)
-            {
-                SetLocalhost("Server Address was not set");
-            }
-            else
-            {
-                try
-                {
-                    _ip = IPAddress.Parse(Address.Text);
-                }
-                catch (FormatException)
-                {
-                    var message = "Wrong Address format" + Environment.NewLine;
-                    message += "Attempt to get IP from Domain" + Environment.NewLine;
-                    try
-                    {
-                        _ip = Dns.GetHostAddresses(Address.Text)[0];
-                        if (_ip.AddressFamily == AddressFamily.InterNetworkV6)
-                        {
-                            _ip = _ip.MapToIPv4();
-                        }
-                    }
-                    catch
-                    {
-                        message += "Unable to get IP Address from Domain";
-                        SetLocalhost(message);
-                    }
-                }
-            }
-        }
         private void SetLocalPort(string message)
         {
-            Port.Text = "27960";
-            _port = 27960;
+            Port = 27960;
             message += Environment.NewLine + "Port is set to the Default value 27960";
             MessageBox.Show(message, "Default Port Number", MessageBoxButton.OK, MessageBoxImage.Exclamation);
-        }
-        private void CheckPort()
-        {
-            if (Port.Text.Length != 0)
-            {
-                try
-                {
-                    _port = ushort.Parse(Port.Text);
-                }
-                catch (OverflowException)
-                {
-                    SetLocalPort("Port value has to be between 0 and 65536");
-                }
-                catch (FormatException)
-                {
-                    SetLocalPort("Port has to be Number");
-                }
-            }
-            else
-            {
-                SetLocalPort("Port number was not set");
-            }
-        }
-        private void CheckIpPort()
-        {
-            CheckIp();
-            CheckPort();
         }
 
         private void Send_Click(object sender, RoutedEventArgs e)
         {
-            CheckIpPort();
             switch (Combo.SelectedIndex)
             {
                 case (0):
-                    _mainQuery.Rcon(Rcon.Password, Input.Text, _ip, _port);
+                    _mainQuery.Rcon(Rcon.Password, Input.Text, Ip, Port);
                     break;
                 case (1):
-                    _mainQuery.Print(Rcon.Password, Input.Text, _ip, _port);
+                    _mainQuery.Print(Rcon.Password, Input.Text, Ip, Port);
                     break;
                 case (2):
-                    _mainQuery.Say(Rcon.Password, Input.Text, _ip, _port);
+                    _mainQuery.Say(Rcon.Password, Input.Text, Ip, Port);
                     break;
                 case (3):
-                    _mainQuery.Send(Input.Text, _ip, _port);
+                    _mainQuery.Send(Input.Text, Ip, Port);
                     break;
                 case (4):
-                    _mainQuery.BigText(Rcon.Password, Input.Text, _ip, _port);
+                    _mainQuery.BigText(Rcon.Password, Input.Text, Ip, Port);
                     break;
                 case (5):
-                    _mainQuery.PM(Rcon.Password, ID.Text, Input.Text, _ip, _port);
+                    _mainQuery.PM(Rcon.Password, ID.Text, Input.Text, Ip, Port);
                     break;
                 /*case (6):
-                    _MainQuery.GetCvar(Rcon.Password, Input.Text, _ip, _port);
+                    _MainQuery.GetCvar(Rcon.Password, Input.Text, Ip, Port);
                     break;*/
                 default:
-                    _mainQuery.Send(Input.Text, _ip, _port);
+                    _mainQuery.Send(Input.Text, Ip, Port);
                     break;
             }
         }
@@ -233,24 +245,19 @@ namespace UrTQueryWpf
         }
         private void GetStatus_Click(object sender, RoutedEventArgs e)
         {
-            CheckIpPort();
-            _mainQuery.GetStatus(_ip, _port);
+            _mainQuery.GetStatus(Ip, Port);
         }
         private void GetInfo_Click(object sender, RoutedEventArgs e)
         {
-            CheckIpPort();
-            _mainQuery.GetInfo(_ip, _port);
+            _mainQuery.GetInfo(Ip, Port);
         }
         private void RconStatus_Click(object sender, RoutedEventArgs e)
         {
-            CheckIpPort();
-            _mainQuery.Rcon(Rcon.Password, "status", _ip, _port);
+            _mainQuery.Rcon(Rcon.Password, "status", Ip, Port);
         }
         private void TestPassword_Click(object sender, RoutedEventArgs e)
         {
-
-            CheckIpPort();
-            _mainQuery.Rcon(Rcon.Password, "echo \"Good rconpassword.\"", _ip, _port);
+            _mainQuery.Rcon(Rcon.Password, "echo \"Good rconpassword.\"", Ip, Port);
         }
 
         private void Combo_SelectionChanged(object sender, SelectionChangedEventArgs e)

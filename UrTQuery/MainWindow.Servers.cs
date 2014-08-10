@@ -1,4 +1,6 @@
-﻿using QuakeQueryDll;
+﻿using System.Globalization;
+using System.Net.Sockets;
+using QuakeQueryDll;
 using System;
 using System.Collections.Generic;
 using System.Data;
@@ -6,7 +8,6 @@ using System.Linq;
 using System.Net;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Threading;
 
 namespace UrTQueryWpf
 {
@@ -32,16 +33,16 @@ namespace UrTQueryWpf
             _serverListDataTable.Columns.Add("Ping", typeof(ushort));
             _serverListDataTable.PrimaryKey = new[] { _serverListDataTable.Columns[7], _serverListDataTable.Columns[8] };
 
-            _serverListDataGrid.ItemsSource = _serverListDataTable.DefaultView;
+            ServerListDataGrid.ItemsSource = _serverListDataTable.DefaultView;
         }
         
         private void UpdateStatus()
         {
             Dispatcher.Invoke(() =>
             {
-                Done.Text = _serverListDataTable.Rows.Count.ToString();
-                Pending.Text = _tmpServers.Count.ToString();
-                Total.Text = _mainQuery.Servers.Count.ToString();
+                Done.Text = _serverListDataTable.Rows.Count.ToString(CultureInfo.InvariantCulture);
+                Pending.Text = _tmpServers.Count.ToString(CultureInfo.InvariantCulture);
+                Total.Text = _mainQuery.Servers.Count.ToString(CultureInfo.InvariantCulture);
             });
         }
         private class TmpServer
@@ -51,7 +52,7 @@ namespace UrTQueryWpf
             public ushort Port;
             public ushort Attempts { get { return _atempts++; } }
         }
-        private readonly DispatcherTimer _refreshTimer = new DispatcherTimer();
+
         void _refreshTimer_Tick(object sender, EventArgs e)
         {
             if (_tmpServers.Count == 0)
@@ -59,11 +60,9 @@ namespace UrTQueryWpf
             foreach (var server in _tmpServers.ToList())
             {
                 _mainQuery.GetInfo(server.Value.Ip, server.Value.Port);
-                if (server.Value.Attempts > 10)
-                {
-                    _tmpServers.Remove(server.Key);
-                    UpdateStatus();
-                }
+                if (server.Value.Attempts <= 10) continue;
+                _tmpServers.Remove(server.Key);
+                UpdateStatus();
             }
         }
 
@@ -84,7 +83,16 @@ namespace UrTQueryWpf
             _refreshTimer.Stop();
             _mainQuery.ClearList();
             Refresh_Click(this, e);
-            _mainQuery.Master(Dns.GetHostAddresses("master.urbanterror.info")[0], 27900, 68, true, true);
+            try
+            {
+                _mainQuery.Master(Dns.GetHostAddresses("master.urbanterror.info")[0], 27900, 68, true, true);
+                _mainQuery.Send("", Ip, Port);
+            }
+            catch (SocketException ex)
+            {
+                if (ex.SocketErrorCode != SocketError.HostNotFound)
+                    throw;
+            }
         }
         private void Refresh_Click(object sender, RoutedEventArgs e)
         {
@@ -101,18 +109,17 @@ namespace UrTQueryWpf
             }
             if (!_refreshTimer.IsEnabled)
                 _refreshTimer.Start();
-            _serverListDataGrid.Items.Refresh();
+            ServerListDataGrid.Items.Refresh();
             UpdateStatus();
         }
 
         private void _ServerListDataGrid_MouseDoubleClick(object sender, System.Windows.Input.MouseButtonEventArgs e)
         {
             var currentRow = ((DataRowView)((DataGrid)sender).CurrentItem).Row;
-            if (_ip.ToString() != currentRow[7].ToString() && _port.ToString() != currentRow[8].ToString())
+            if (Ip.ToString() != currentRow[7].ToString() && Port.ToString(CultureInfo.InvariantCulture) != currentRow[8].ToString())
             {
-                this.Address.Text = currentRow[7].ToString();
-                this.Port.Text = currentRow[8].ToString();
-                CheckIpPort();
+                Address.Text = currentRow[7].ToString();
+                TextBoxPort.Text = currentRow[8].ToString();
                 Clear_Click(sender, e);
             }
 
@@ -122,12 +129,12 @@ namespace UrTQueryWpf
         }
         private void Info_RightClick(object sender, RoutedEventArgs e)
         {
-            var currentRow = ((DataRowView)_serverListDataGrid.CurrentItem).Row;
+            var currentRow = ((DataRowView)ServerListDataGrid.CurrentItem).Row;
             _mainQuery.GetInfo(currentRow[7].ToString(), ushort.Parse(currentRow[8].ToString()));
         }
         private void Status_RightClick(object sender, RoutedEventArgs e)
         {
-            _ServerListDataGrid_MouseDoubleClick(_serverListDataGrid, null);
+            _ServerListDataGrid_MouseDoubleClick(ServerListDataGrid, null);
             GetStatus_Click(sender, e);
         }
     }
