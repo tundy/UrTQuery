@@ -49,7 +49,6 @@ namespace UrTQueryWpf
             }
             set { Address.Text = value.ToString(); }
         }
-
         internal ushort Port
         {
             get
@@ -77,7 +76,21 @@ namespace UrTQueryWpf
             set { TextBoxPort.Text = value.ToString(CultureInfo.InvariantCulture); }
         }
 
-        void _MainQuery_serverResponseEvent(Server sender)
+        private void SetLocalAddress(string message)
+        {
+            Ip = IPAddress.Parse("127.0.0.1");
+            message += Environment.NewLine + "Address is set to the Default value 127.0.0.1";
+            MessageBox.Show(message, "Default IP Adress", MessageBoxButton.OK, MessageBoxImage.Exclamation);
+        }
+        private void SetLocalPort(string message)
+        {
+            Port = 27960;
+            message += Environment.NewLine + "Port is set to the Default value 27960";
+            MessageBox.Show(message, "Default Port Number", MessageBoxButton.OK, MessageBoxImage.Exclamation);
+        }
+
+        # region Query Event Handlers
+        private void _MainQuery_serverResponseEvent(Server sender)
         {
             Dispatcher.Invoke(() =>
             {
@@ -88,7 +101,7 @@ namespace UrTQueryWpf
                 }
             });
         }
-        void _MainQuery_printResponseEvent(Server sender)
+        private void _MainQuery_printResponseEvent(Server sender)
         {
             Dispatcher.Invoke(() =>
             {
@@ -100,12 +113,19 @@ namespace UrTQueryWpf
                 Output.AppendText(sender.ToString() + Environment.NewLine);
                 Output.AppendText(sender.Response);
                 Output.AppendText(Environment.NewLine);
-                if (wasScrolledToEnd)
-                    Output.ScrollToEnd();
-                lastFocusedItem.Focus();
+
+                /*foreach (var cvar in sender.Cvars.ToList())
+                {
+                    Output.AppendText(cvar.Key + ": " + cvar.Value);
+                    Output.AppendText(Environment.NewLine);
+                }
+                Output.AppendText(Environment.NewLine);*/
+
+                if (wasScrolledToEnd) Output.ScrollToEnd();
+                if (lastFocusedItem != null) lastFocusedItem.Focus();
             });
         }
-        void _MainQuery_statusResponseEvent(Server sender)
+        private void _MainQuery_statusResponseEvent(Server sender)
         {
             Dispatcher.Invoke(() =>
             {
@@ -121,12 +141,11 @@ namespace UrTQueryWpf
                     Output.AppendText(Environment.NewLine);
                 }
                 Output.AppendText(Environment.NewLine);
-                if (wasScrolledToEnd)
-                    Output.ScrollToEnd();
-                lastFocusedItem.Focus();
+                if (wasScrolledToEnd) Output.ScrollToEnd();
+                if (lastFocusedItem != null) lastFocusedItem.Focus();
             });
         }
-        void _MainQuery_infoResponseEvent(Server sender)
+        private void _MainQuery_infoResponseEvent(Server sender)
         {
             Dispatcher.Invoke(() =>
             {
@@ -143,9 +162,8 @@ namespace UrTQueryWpf
                         Output.AppendText(Environment.NewLine);
                     }
                     Output.AppendText(Environment.NewLine);
-                    if (wasScrolledToEnd)
-                        Output.ScrollToEnd();
-                    lastFocusedItem.Focus();
+                    if (wasScrolledToEnd) Output.ScrollToEnd();
+                    if (lastFocusedItem != null) lastFocusedItem.Focus();
                 }
 
                 if (!sender.Info.ContainsKey("hostname"))
@@ -194,21 +212,9 @@ namespace UrTQueryWpf
                 UpdateStatus();
             });
         }
+        # endregion
 
-
-        private void SetLocalAddress(string message)
-        {
-            Ip = IPAddress.Parse("127.0.0.1");
-            message += Environment.NewLine + "Address is set to the Default value 127.0.0.1";
-            MessageBox.Show(message, "Default IP Adress", MessageBoxButton.OK, MessageBoxImage.Exclamation);
-        }
-        private void SetLocalPort(string message)
-        {
-            Port = 27960;
-            message += Environment.NewLine + "Port is set to the Default value 27960";
-            MessageBox.Show(message, "Default Port Number", MessageBoxButton.OK, MessageBoxImage.Exclamation);
-        }
-
+        # region Button_Clicks
         private void Send_Click(object sender, RoutedEventArgs e)
         {
             switch (Combo.SelectedIndex)
@@ -259,6 +265,7 @@ namespace UrTQueryWpf
         {
             _mainQuery.Rcon(Rcon.Password, "echo \"Good rconpassword.\"", Ip, Port);
         }
+        #  endregion
 
         private void Combo_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
@@ -286,16 +293,15 @@ namespace UrTQueryWpf
             ((TextBox)sender).Text = ((TextBox)sender).Text.Replace(" ", "");
             ((TextBox)sender).Text = ((TextBox)sender).Text.Replace("\t", "");
         }
+        private void NumbersOnly_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            ((TextBox)sender).Text = new string(((TextBox)sender).Text.Where(char.IsDigit).ToArray());
+        }
 
         private void Input_KeyUp(object sender, KeyEventArgs e)
         {
             if (e.Key == Key.Enter)
                 Send_Click(sender, e);
-        }
-
-        private void Port_TextChanged(object sender, TextChangedEventArgs e)
-        {
-            ((TextBox)sender).Text = new string(((TextBox)sender).Text.Where(char.IsDigit).ToArray());
         }
     }
 }

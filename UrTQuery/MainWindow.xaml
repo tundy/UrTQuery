@@ -24,7 +24,7 @@
                         <Label Content="Ip Address:" VerticalContentAlignment="Center"/>
                         <TextBox Name="Address" HorizontalAlignment="Left" TextWrapping="NoWrap" Width="120" Margin="0,2" TextChanged="NoSpaces_TextChanged" VerticalContentAlignment="Center" Background="White" />
                         <Label Content="Port:" VerticalContentAlignment="Center"/>
-                        <TextBox Name="TextBoxPort" HorizontalAlignment="Left" TextWrapping="NoWrap" Margin="0,2" Width="45" MaxLength="5" TextChanged="Port_TextChanged" VerticalContentAlignment="Center" Background="White" />
+                        <TextBox Name="TextBoxPort" HorizontalAlignment="Left" TextWrapping="NoWrap" Margin="0,2" Width="45" MaxLength="5" TextChanged="NumbersOnly_TextChanged" VerticalContentAlignment="Center" Background="White" />
                     </StackPanel>
                     <StackPanel Orientation="Horizontal" Grid.Row="0" Grid.Column="1" HorizontalAlignment="Right">
                         <Label Content="RCON Password:"/>
