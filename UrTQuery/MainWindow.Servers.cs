@@ -15,6 +15,13 @@ namespace UrTQueryWpf
     {
         private readonly Dictionary<string, TmpServer> _tmpServers = new Dictionary<string, TmpServer>();
         private readonly DataTable _serverListDataTable = new DataTable();
+        private class TmpServer
+        {
+            private ushort _atempts;
+            public string Ip = string.Empty;
+            public ushort Port;
+            public ushort Attempts { get { return _atempts++; } }
+        }
 
         private void _ServerListDataInit()
         {
@@ -26,8 +33,8 @@ namespace UrTQueryWpf
             _serverListDataTable.Columns.Add("Hostname", typeof(string));
             _serverListDataTable.Columns.Add("Map Name", typeof(string));
             _serverListDataTable.Columns.Add("Game Type", typeof(string));
-            _serverListDataTable.Columns.Add("Clients", typeof(ushort));
-            _serverListDataTable.Columns.Add("Max Clients", typeof(ushort));
+            _serverListDataTable.Columns.Add("Clients", typeof(short));
+            _serverListDataTable.Columns.Add("Max Clients", typeof(short));
             _serverListDataTable.Columns.Add("IP Address", typeof(string));
             _serverListDataTable.Columns.Add("Port", typeof(ushort));
             _serverListDataTable.Columns.Add("Ping", typeof(ushort));
@@ -44,13 +51,6 @@ namespace UrTQueryWpf
                 Pending.Text = _tmpServers.Count.ToString(CultureInfo.InvariantCulture);
                 Total.Text = _mainQuery.Servers.Count.ToString(CultureInfo.InvariantCulture);
             });
-        }
-        private class TmpServer
-        {
-            private ushort _atempts;
-            public string Ip = string.Empty;
-            public ushort Port;
-            public ushort Attempts { get { return _atempts++; } }
         }
 
         void _refreshTimer_Tick(object sender, EventArgs e)
@@ -115,7 +115,10 @@ namespace UrTQueryWpf
 
         private void _ServerListDataGrid_MouseDoubleClick(object sender, System.Windows.Input.MouseButtonEventArgs e)
         {
-            var currentRow = ((DataRowView)((DataGrid)sender).CurrentItem).Row;
+            var currentItem = ((DataGrid)sender).CurrentItem;
+            if (currentItem == null) return;
+            var currentRow = ((DataRowView)currentItem).Row;
+
             if (Ip.ToString() != currentRow[7].ToString() && Port.ToString(CultureInfo.InvariantCulture) != currentRow[8].ToString())
             {
                 Address.Text = currentRow[7].ToString();
@@ -124,8 +127,8 @@ namespace UrTQueryWpf
             }
 
             Tabs.SelectedIndex = 0;
-            if (e != null)
-                e.Handled = true;
+            ((DataGrid)sender).CurrentItem = null;
+            if (e != null) e.Handled = true;
         }
         private void Info_RightClick(object sender, RoutedEventArgs e)
         {
