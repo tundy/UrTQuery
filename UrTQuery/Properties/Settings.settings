@@ -5,7 +5,7 @@
     <Setting Name="LastIP" Type="System.String" Scope="User">
       <Value Profile="(Default)">127.0.0.1</Value>
     </Setting>
-    <Setting Name="LastPort" Type="System.String" Scope="User">
+    <Setting Name="LastPort" Type="System.UInt16" Scope="User">
       <Value Profile="(Default)">27960</Value>
     </Setting>
   </Settings>

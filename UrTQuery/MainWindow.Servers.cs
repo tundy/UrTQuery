@@ -122,7 +122,7 @@ namespace UrTQueryWpf
             if (Ip.ToString() != currentRow[7].ToString() && Port.ToString(CultureInfo.InvariantCulture) != currentRow[8].ToString())
             {
                 Address.Text = currentRow[7].ToString();
-                TextBoxPort.Text = currentRow[8].ToString();
+                Port = (ushort)currentRow[8];
                 Clear_Click(sender, e);
             }
 

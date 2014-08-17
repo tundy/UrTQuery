@@ -18,7 +18,7 @@ namespace UrTQueryWpf
             InitializeComponent();
             _ServerListDataInit();
             Address.Text = Settings.Default.LastIP;
-            TextBoxPort.Text = Settings.Default.LastPort;
+            Port = Settings.Default.LastPort;
 
             Combo.SelectedIndex = 0;
 
@@ -48,7 +48,7 @@ namespace UrTQueryWpf
         private void MainWindow_Closing(object sender, CancelEventArgs e)
         {
             Settings.Default.LastIP = Address.Text;
-            Settings.Default.LastPort = TextBoxPort.Text;
+            Settings.Default.LastPort = Port;
             Settings.Default.Save();
             _mainQuery.Close();
         }

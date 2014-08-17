@@ -34,7 +34,7 @@ namespace UrTQueryWpf
                     message += "Attempt to get IP from Domain" + Environment.NewLine;
                     try
                     {
-                        var tmp = Dns.GetHostAddresses(Address.Text)[0];
+                        var tmp = Dns.GetHostAddresses(Ip.ToString())[0];
                         if (tmp.AddressFamily == AddressFamily.InterNetworkV6)
                             tmp = tmp.MapToIPv4();
                         return tmp;
@@ -113,13 +113,6 @@ namespace UrTQueryWpf
                 Output.AppendText(sender.ToString() + Environment.NewLine);
                 Output.AppendText(sender.Response);
                 Output.AppendText(Environment.NewLine);
-
-                /*foreach (var cvar in sender.Cvars.ToList())
-                {
-                    Output.AppendText(cvar.Key + ": " + cvar.Value);
-                    Output.AppendText(Environment.NewLine);
-                }
-                Output.AppendText(Environment.NewLine);*/
 
                 if (wasScrolledToEnd) Output.ScrollToEnd();
                 if (lastFocusedItem != null) lastFocusedItem.Focus();
@@ -260,6 +253,31 @@ namespace UrTQueryWpf
         private void RconStatus_Click(object sender, RoutedEventArgs e)
         {
             _mainQuery.Rcon(Rcon.Password, "status", Ip, Port);
+        }
+
+        private void ShowCvars_Click(object sender, RoutedEventArgs e)
+        {
+            if (!_mainQuery.Servers.ContainsKey(Ip + ":" + Port)) return;
+
+            var lastFocusedItem = FocusManager.GetFocusedElement(this);
+            var wasScrolledToEnd = Output.VerticalOffset + Output.ViewportHeight >= Output.ExtentHeight;
+            Output.Focus();
+            Output.AppendText(Environment.NewLine);
+            Output.AppendText(Ip + ":" + Port + Environment.NewLine);
+
+            var server = _mainQuery.Servers[Ip + ":" + Port];
+            if (server.Cvars != null && server.Cvars.Count != 0)
+            {
+                foreach (var cvar in server.Cvars.ToList())
+                {
+                    Output.AppendText(cvar.Key + ": " + cvar.Value);
+                    Output.AppendText(Environment.NewLine);
+                }
+                Output.AppendText(Environment.NewLine);
+            }
+
+    if (wasScrolledToEnd) Output.ScrollToEnd();
+            if (lastFocusedItem != null) lastFocusedItem.Focus();
         }
         private void TestPassword_Click(object sender, RoutedEventArgs e)
         {

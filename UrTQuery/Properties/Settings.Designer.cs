@@ -38,9 +38,9 @@ namespace UrTQueryWpf.Properties {
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("27960")]
-        public string LastPort {
+        public ushort LastPort {
             get {
-                return ((string)(this["LastPort"]));
+                return ((ushort)(this["LastPort"]));
             }
             set {
                 this["LastPort"] = value;

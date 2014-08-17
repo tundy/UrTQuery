@@ -40,7 +40,7 @@
                         </Button>
                     </StackPanel>
                     <StackPanel Orientation="Horizontal" Grid.Row="1" Grid.Column="0" HorizontalAlignment="Left">
-                        <Button Name="GetStatus" Content="Get Status" Margin="5,2" Padding="5,1" Click="GetStatus_Click" >
+                        <Button Name="GetStatus" Content="Get Status" Margin="2,2" Padding="5,1" Click="GetStatus_Click" >
                             <Button.Background>
                                 <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
                                     <GradientStop Color="White" Offset="0"/>
@@ -48,7 +48,7 @@
                                 </LinearGradientBrush>
                             </Button.Background>
                         </Button>
-                        <Button Name="GetInfo" Content="Get Info" Margin="5,2" Padding="5,1" Click="GetInfo_Click" >
+                        <Button Name="GetInfo" Content="Get Info" Margin="2,2" Padding="5,1" Click="GetInfo_Click" >
                             <Button.Background>
                                 <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
                                     <GradientStop Color="White" Offset="0"/>
@@ -56,7 +56,15 @@
                                 </LinearGradientBrush>
                             </Button.Background>
                         </Button>
-                        <Button Name="RconStatus" Content="Rcon Status" Margin="5,2" Padding="5,1" Click="RconStatus_Click" >
+                        <Button Name="RconStatus" Content="Rcon Status" Margin="2,2" Padding="5,1" Click="RconStatus_Click" >
+                            <Button.Background>
+                                <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+                                    <GradientStop Color="White" Offset="0"/>
+                                    <GradientStop Color="LightGray" Offset="1"/>
+                                </LinearGradientBrush>
+                            </Button.Background>
+                        </Button>
+                        <Button Name="ShowCvars" Content="Cvars" Margin="2,2" Padding="5,1" Click="ShowCvars_Click" >
                             <Button.Background>
                                 <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
                                     <GradientStop Color="White" Offset="0"/>
