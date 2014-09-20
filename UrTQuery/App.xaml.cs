@@ -2,7 +2,7 @@
 using System.IO;
 using System.Windows;
 
-namespace UrTQueryWpf
+namespace UrTQuery
 {
     /// <summary>
     /// Interaction logic for App.xaml
@@ -26,7 +26,7 @@ namespace UrTQueryWpf
             }
             else
             {
-                if (System.String.Compare(FileVersionInfo.GetVersionInfo("QuakeQueryDll.dll").ProductVersion, "3.4.4.2", System.StringComparison.Ordinal) != 0)
+                if (System.String.Compare(FileVersionInfo.GetVersionInfo("QuakeQueryDll.dll").ProductVersion, "3.4.4.3", System.StringComparison.Ordinal) != 0)
                     MessageBox.Show("Quake Query Dll is different than version that was used for compiling !", "Wrong version", MessageBoxButton.OK, MessageBoxImage.Warning);
                 //Re-enable normal shutdown mode.
                 Current.ShutdownMode = ShutdownMode.OnMainWindowClose;

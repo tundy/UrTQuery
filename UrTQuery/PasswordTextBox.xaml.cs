@@ -3,7 +3,7 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
 
-namespace UrTQueryWpf
+namespace UrTQuery
 {
     /// <summary>
     /// Interaction logic for PasswordTextBox.xaml

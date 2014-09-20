@@ -9,7 +9,7 @@ using System.Net;
 using System.Windows;
 using System.Windows.Controls;
 
-namespace UrTQueryWpf
+namespace UrTQuery
 {
     public partial class MainWindow
     {
@@ -50,6 +50,11 @@ namespace UrTQueryWpf
                 Done.Text = _serverListDataTable.Rows.Count.ToString(CultureInfo.InvariantCulture);
                 Pending.Text = _tmpServers.Count.ToString(CultureInfo.InvariantCulture);
                 Total.Text = _mainQuery.Servers.Count.ToString(CultureInfo.InvariantCulture);
+                TaskbarItemInfo.ProgressState = System.Windows.Shell.TaskbarItemProgressState.Normal;
+                if (_tmpServers.Count == 0)
+                    TaskbarItemInfo.ProgressState = System.Windows.Shell.TaskbarItemProgressState.None;
+                else
+                    TaskbarItemInfo.ProgressState = System.Windows.Shell.TaskbarItemProgressState.Indeterminate;
             });
         }
 
@@ -68,10 +73,10 @@ namespace UrTQueryWpf
 
         private void _MainQuery_NewServerEvent(Server sender)
         {
-            _mainQuery.GetInfo(sender.Ip, sender.Port);
+            _mainQuery.GetInfo(sender.IP, sender.Port);
             Dispatcher.Invoke(() =>
             {
-                var tmp = new TmpServer { Ip = sender.Ip, Port = sender.Port };
+                var tmp = new TmpServer { Ip = sender.IP, Port = (ushort)sender.Port };
                 _tmpServers[sender.ToString()] = tmp;
             });
             if (!_refreshTimer.IsEnabled)
@@ -105,7 +110,7 @@ namespace UrTQueryWpf
             _serverListDataTable.Columns[0].AutoIncrementStep = 1;
             foreach (var server in _mainQuery.Servers.ToList())
             {
-                _tmpServers[server.Key] = new TmpServer { Ip = server.Value.Ip, Port = server.Value.Port };
+                _tmpServers[server.Key] = new TmpServer { Ip = server.Value.IP, Port = (ushort)server.Value.Port };
             }
             if (!_refreshTimer.IsEnabled)
                 _refreshTimer.Start();

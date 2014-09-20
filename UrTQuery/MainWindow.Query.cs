@@ -9,7 +9,7 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 
-namespace UrTQueryWpf
+namespace UrTQuery
 {
     public partial class MainWindow
     {
@@ -94,7 +94,7 @@ namespace UrTQueryWpf
         {
             Dispatcher.Invoke(() =>
             {
-                var foundRow = _serverListDataTable.Rows.Find(new object[] { sender.Ip, sender.Port });
+                var foundRow = _serverListDataTable.Rows.Find(new object[] { sender.IP, sender.Port });
                 if (foundRow != null)
                 {
                     foundRow[9] = (ushort)((sender.LastRecvTime - sender.LastSendTime).TotalMilliseconds);
@@ -105,7 +105,7 @@ namespace UrTQueryWpf
         {
             Dispatcher.Invoke(() =>
             {
-                if (!sender.Ip.Equals(Ip.ToString()) || !sender.Port.Equals(Port)) return;
+                if (!sender.IP.Equals(Ip.ToString()) || !sender.Port.Equals(Port)) return;
                 var lastFocusedItem = FocusManager.GetFocusedElement(this);
                 var wasScrolledToEnd = Output.VerticalOffset + Output.ViewportHeight >= Output.ExtentHeight;
                 Output.Focus();
@@ -122,7 +122,7 @@ namespace UrTQueryWpf
         {
             Dispatcher.Invoke(() =>
             {
-                if (!sender.Ip.Equals(Ip.ToString()) || !sender.Port.Equals(Port)) return;
+                if (!sender.IP.Equals(Ip.ToString()) || !sender.Port.Equals(Port)) return;
                 var lastFocusedItem = FocusManager.GetFocusedElement(this);
                 var wasScrolledToEnd = Output.VerticalOffset + Output.ViewportHeight >= Output.ExtentHeight;
                 Output.Focus();
@@ -142,7 +142,7 @@ namespace UrTQueryWpf
         {
             Dispatcher.Invoke(() =>
             {
-                if (sender.Ip.Equals(Ip.ToString()) && sender.Port.Equals(Port))
+                if (sender.IP.Equals(Ip.ToString()) && sender.Port.Equals(Port))
                 {
                     var lastFocusedItem = FocusManager.GetFocusedElement(this);
                     var wasScrolledToEnd = Output.VerticalOffset + Output.ViewportHeight >= Output.ExtentHeight;
@@ -160,7 +160,7 @@ namespace UrTQueryWpf
                 }
 
                 if (!sender.Info.ContainsKey("hostname"))
-                    sender.Info["hostname"] = sender.Ip;
+                    sender.Info["hostname"] = sender.IP;
 
                 if (GameModes.LongNames.ContainsKey(sender.Info["gametype"]))
                 {
@@ -180,14 +180,14 @@ namespace UrTQueryWpf
                             sender.Info["gametype"],
                             sender.Info["clients"],
                             sender.Info["sv_maxclients"],
-                            sender.Ip,
+                            sender.IP,
                             sender.Port,
                             (ushort)((sender.LastRecvTime - sender.LastSendTime).TotalMilliseconds)
                             );
                     }
                     catch (ConstraintException)
                     {
-                        var foundRow = _serverListDataTable.Rows.Find(new object[] { sender.Ip, sender.Port });
+                        var foundRow = _serverListDataTable.Rows.Find(new object[] { sender.IP, sender.Port });
                         if (foundRow != null)
                         {
                             foundRow[1] = sender.Info["modversion"];
@@ -231,7 +231,7 @@ namespace UrTQueryWpf
                     _mainQuery.PM(Rcon.Password, ID.Text, Input.Text, Ip, Port);
                     break;
                 /*case (6):
-                    _MainQuery.GetCvar(Rcon.Password, Input.Text, Ip, Port);
+                    _MainQuery.GetCvar(Rcon.Password, Input.Text, IP, Port);
                     break;*/
                 default:
                     _mainQuery.Send(Input.Text, Ip, Port);

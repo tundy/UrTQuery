@@ -2,9 +2,9 @@
 using System.Net;
 using System.Net.Sockets;
 using System.Windows.Threading;
-using UrTQueryWpf.Properties;
+using UrTQuery.Properties;
 
-namespace UrTQueryWpf
+namespace UrTQuery
 {
     /// <summary>
     /// Interaction logic for MainWindow.xaml

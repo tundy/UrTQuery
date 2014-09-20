@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Globalization;
 
-namespace UrTQueryWpf
+namespace UrTQuery
 {
     public static class GameModes
     {
@@ -49,6 +49,6 @@ namespace UrTQueryWpf
             {CTF.ToString(CultureInfo.InvariantCulture), "CTF"},
             {Bomb.ToString(CultureInfo.InvariantCulture), "Bomb"},
             {Jump.ToString(CultureInfo.InvariantCulture), "Jump"},
-            };
+        };
     }
 }

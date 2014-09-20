@@ -1,8 +1,11 @@
-﻿<Window x:Class="UrTQueryWpf.MainWindow"
+﻿<Window x:Class="UrTQuery.MainWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        xmlns:src="clr-namespace:UrTQueryWpf"
-        Title="UrTQuery" Width="800" Height="600" MinWidth="800" MinHeight="600" WindowStartupLocation="CenterScreen" Closing="MainWindow_Closing">
+        xmlns:src="clr-namespace:UrTQuery"
+        Title="UrTQuery" Width="800" Height="600" MinWidth="800" MinHeight="600" WindowStartupLocation="CenterScreen" Closing="MainWindow_Closing" Icon="Resources/Azuresol-Sketchy-Quake-3.ico">
+    <Window.TaskbarItemInfo>
+        <TaskbarItemInfo ProgressState="Normal" Description="Urban Terror Query Tool" Overlay="Resources/UrbanTerrorIcon.ico"/>
+    </Window.TaskbarItemInfo>
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="35*"/>
