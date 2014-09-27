@@ -95,6 +95,7 @@
     <Compile Include="PasswordTextBox.xaml.cs">
       <DependentUpon>PasswordTextBox.xaml</DependentUpon>
     </Compile>
+    <Compile Include="TextOperations.cs" />
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
