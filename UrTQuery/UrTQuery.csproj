@@ -89,6 +89,7 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="BindableRichTextBox.cs" />
     <Compile Include="GameModes.cs" />
     <Compile Include="MainWindow.Query.cs" />
     <Compile Include="MainWindow.Servers.cs" />

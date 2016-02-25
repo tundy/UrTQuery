@@ -1,5 +1,6 @@
 ﻿using System.Globalization;
 using System.Net.Sockets;
+using System.Windows.Documents;
 using QuakeQueryDll;
 using System;
 using System.Collections.Generic;
@@ -14,51 +15,67 @@ namespace UrTQuery
     public partial class MainWindow
     {
         private readonly Dictionary<string, TmpServer> _tmpServers = new Dictionary<string, TmpServer>();
-        private readonly DataTable _serverListDataTable = new DataTable();
+        private static readonly DataTable ServerListDataTable = new DataTable();
         private class TmpServer
         {
             private ushort _atempts;
             public string Ip = string.Empty;
             public ushort Port;
-            public ushort Attempts { get { return _atempts++; } }
+            public ushort Attempts => _atempts++;
         }
 
+        private void ServerListDataGrid_AutoGeneratingColumn(object sender, DataGridAutoGeneratingColumnEventArgs e)
+        {
+            if (e.PropertyName == "ID")
+            {
+                e.Cancel = true;
+            }
+            else if (e.PropertyType == typeof (FlowDocument))
+            {
+                var templateColumn = new DataGridTemplateColumn
+                {
+                    Header = e.PropertyName,
+                    CellTemplate = (DataTemplate) Resources["RichTextBoxCellTemplate"]
+                };
+                e.Column = templateColumn;
+            }
+        }
         private void _ServerListDataInit()
         {
-            _serverListDataTable.Columns.Add("ID", typeof(ushort));
-            _serverListDataTable.Columns[0].AutoIncrement = true;
-            _serverListDataTable.Columns[0].AutoIncrementSeed = 1;
-            _serverListDataTable.Columns[0].AutoIncrementStep = 1;
-            _serverListDataTable.Columns.Add("Version", typeof(string));
-            _serverListDataTable.Columns.Add("Hostname", typeof(string));
-            _serverListDataTable.Columns.Add("Map Name", typeof(string));
-            _serverListDataTable.Columns.Add("Game Type", typeof(string));
-            _serverListDataTable.Columns.Add("Clients", typeof(short));
-            _serverListDataTable.Columns.Add("Max Clients", typeof(short));
-            _serverListDataTable.Columns.Add("IP Address", typeof(string));
-            _serverListDataTable.Columns.Add("Port", typeof(ushort));
-            _serverListDataTable.Columns.Add("Ping", typeof(ushort));
-            _serverListDataTable.PrimaryKey = new[] { _serverListDataTable.Columns[7], _serverListDataTable.Columns[8] };
+            ServerListDataTable.TableName = "_serverListDataTable";
+            ServerListDataTable.Columns.Add("ID", typeof(ushort));
+            ServerListDataTable.Columns[0].AutoIncrement = true;
+            ServerListDataTable.Columns[0].AutoIncrementSeed = 1;
+            ServerListDataTable.Columns[0].AutoIncrementStep = 1;
+            ServerListDataTable.Columns.Add("Version", typeof(string));
+            ServerListDataTable.Columns.Add("test", typeof(FlowDocument));
+            //ServerListDataTable.Columns[2].
+            ServerListDataTable.Columns.Add("Map Name", typeof(string));
+            ServerListDataTable.Columns.Add("Game Type", typeof(string));
+            ServerListDataTable.Columns.Add("Clients", typeof(string));
+            ServerListDataTable.Columns.Add("Max Clients", typeof(short));
+            ServerListDataTable.Columns.Add("IP Address", typeof(string));
+            ServerListDataTable.Columns.Add("Port", typeof(ushort));
+            ServerListDataTable.Columns.Add("Ping", typeof(ushort));
+            ServerListDataTable.Columns.Add("Hostname", typeof(string));
+            ServerListDataTable.PrimaryKey = new[] { ServerListDataTable.Columns[7], ServerListDataTable.Columns[8] };
 
-            ServerListDataGrid.ItemsSource = _serverListDataTable.DefaultView;
+            ServerListDataGrid.ItemsSource = ServerListDataTable.DefaultView;
         }
         
         private void UpdateStatus()
         {
             Dispatcher.Invoke(() =>
             {
-                Done.Text = _serverListDataTable.Rows.Count.ToString(CultureInfo.InvariantCulture);
+                Done.Text = ServerListDataTable.Rows.Count.ToString(CultureInfo.InvariantCulture);
                 Pending.Text = _tmpServers.Count.ToString(CultureInfo.InvariantCulture);
                 Total.Text = _mainQuery.Servers.Count.ToString(CultureInfo.InvariantCulture);
                 TaskbarItemInfo.ProgressState = System.Windows.Shell.TaskbarItemProgressState.Normal;
-                if (_tmpServers.Count == 0)
-                    TaskbarItemInfo.ProgressState = System.Windows.Shell.TaskbarItemProgressState.None;
-                else
-                    TaskbarItemInfo.ProgressState = System.Windows.Shell.TaskbarItemProgressState.Indeterminate;
+                TaskbarItemInfo.ProgressState = _tmpServers.Count == 0 ? System.Windows.Shell.TaskbarItemProgressState.None : System.Windows.Shell.TaskbarItemProgressState.Indeterminate;
             });
         }
 
-        void _refreshTimer_Tick(object sender, EventArgs e)
+        private void _refreshTimer_Tick(object sender, EventArgs e)
         {
             if (_tmpServers.Count == 0)
                 _refreshTimer.Stop();
@@ -103,11 +120,11 @@ namespace UrTQuery
         {
             _refreshTimer.Stop();
             _tmpServers.Clear();
-            _serverListDataTable.Clear();
-            _serverListDataTable.Columns[0].AutoIncrementSeed = -1;
-            _serverListDataTable.Columns[0].AutoIncrementStep = -1;
-            _serverListDataTable.Columns[0].AutoIncrementSeed = 1;
-            _serverListDataTable.Columns[0].AutoIncrementStep = 1;
+            ServerListDataTable.Clear();
+            ServerListDataTable.Columns[0].AutoIncrementSeed = -1;
+            ServerListDataTable.Columns[0].AutoIncrementStep = -1;
+            ServerListDataTable.Columns[0].AutoIncrementSeed = 1;
+            ServerListDataTable.Columns[0].AutoIncrementStep = 1;
             foreach (var server in _mainQuery.Servers.ToList())
             {
                 _tmpServers[server.Key] = new TmpServer { Ip = server.Value.IP, Port = (ushort)server.Value.Port };

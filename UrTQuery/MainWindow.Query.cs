@@ -1,7 +1,6 @@
 ﻿using System.Globalization;
 using QuakeQueryDll;
 using System;
-using System.Data;
 using System.Linq;
 using System.Net;
 using System.Net.Sockets;
@@ -94,7 +93,7 @@ namespace UrTQuery
         {
             Dispatcher.Invoke(() =>
             {
-                var foundRow = _serverListDataTable.Rows.Find(new object[] { sender.IP, sender.Port });
+                var foundRow = ServerListDataTable.Rows.Find(new object[] { sender.IP, sender.Port });
                 if (foundRow != null)
                 {
                     foundRow[9] = (ushort)((sender.LastRecvTime - sender.LastSendTime).TotalMilliseconds);
@@ -115,7 +114,7 @@ namespace UrTQuery
                 Output.AppendText(Environment.NewLine);
 
                 if (wasScrolledToEnd) Output.ScrollToEnd();
-                if (lastFocusedItem != null) lastFocusedItem.Focus();
+                lastFocusedItem?.Focus();
             });
         }
         private void _MainQuery_statusResponseEvent(Server sender)
@@ -135,7 +134,7 @@ namespace UrTQuery
                 }
                 Output.AppendText(Environment.NewLine);
                 if (wasScrolledToEnd) Output.ScrollToEnd();
-                if (lastFocusedItem != null) lastFocusedItem.Focus();
+                lastFocusedItem?.Focus();
             });
         }
         private void _MainQuery_infoResponseEvent(Server sender)
@@ -156,11 +155,14 @@ namespace UrTQuery
                     }
                     Output.AppendText(Environment.NewLine);
                     if (wasScrolledToEnd) Output.ScrollToEnd();
-                    if (lastFocusedItem != null) lastFocusedItem.Focus();
+                    lastFocusedItem?.Focus();
                 }
 
                 if (!sender.Info.ContainsKey("hostname"))
                     sender.Info["hostname"] = sender.IP;
+
+                if (!sender.Info.ContainsKey("bots"))
+                    sender.Info["bots"] = "0";
 
                 if (GameModes.LongNames.ContainsKey(sender.Info["gametype"]))
                 {
@@ -170,35 +172,67 @@ namespace UrTQuery
                 
                 if (sender.Info["game"].Equals("q3ut4"))
                 {
-                    try
+                    var foundRow = ServerListDataTable.Rows.Find(new object[] { sender.IP, sender.Port });
+                    if (foundRow == null)
                     {
-                        _serverListDataTable.Rows.Add(
+                        ServerListDataTable.Rows.Add(
                             null,
                             sender.Info["modversion"],
-                            sender.Info["hostname"],
+                            TextOperations.ConvertToFlowDocument(sender.Info["hostname"]),
                             sender.Info["mapname"],
                             sender.Info["gametype"],
-                            sender.Info["clients"],
+                            (Convert.ToInt32(sender.Info["clients"]) - Convert.ToInt32(sender.Info["bots"])) + " + " +
+                            sender.Info["bots"],
                             sender.Info["sv_maxclients"],
                             sender.IP,
                             sender.Port,
-                            (ushort)((sender.LastRecvTime - sender.LastSendTime).TotalMilliseconds)
+                            (ushort) ((sender.LastRecvTime - sender.LastSendTime).TotalMilliseconds),
+                            sender.Info["hostname"]
+                            );
+                    }
+                    else
+                    {
+                        foundRow[1] = sender.Info["modversion"];
+                        foundRow[2] = TextOperations.ConvertToFlowDocument(sender.Info["hostname"]);
+                        foundRow[3] = sender.Info["mapname"];
+                        foundRow[4] = sender.Info["gametype"];
+                        foundRow[5] = (Convert.ToInt32(sender.Info["clients"]) - Convert.ToInt32(sender.Info["bots"])) +
+                                      " + " + sender.Info["bots"];
+                        foundRow[6] = sender.Info["sv_maxclients"];
+                        foundRow[9] = (ushort) ((sender.LastRecvTime - sender.LastSendTime).TotalMilliseconds);
+                        foundRow[10] = sender.Info["hostname"];
+                    }
+                    /*try
+                    {
+                        ServerListDataTable.Rows.Add(
+                            null,
+                            sender.Info["modversion"],
+                            TextOperations.ConvertToFlowDocument(sender.Info["hostname"]),
+                            sender.Info["mapname"],
+                            sender.Info["gametype"],
+                            (Convert.ToInt32(sender.Info["clients"]) - Convert.ToInt32(sender.Info["bots"])) + " + " + sender.Info["bots"],
+                            sender.Info["sv_maxclients"],
+                            sender.IP,
+                            sender.Port,
+                            (ushort)((sender.LastRecvTime - sender.LastSendTime).TotalMilliseconds),
+                            sender.Info["hostname"]
                             );
                     }
                     catch (ConstraintException)
                     {
-                        var foundRow = _serverListDataTable.Rows.Find(new object[] { sender.IP, sender.Port });
+                        var foundRow = ServerListDataTable.Rows.Find(new object[] { sender.IP, sender.Port });
                         if (foundRow != null)
                         {
                             foundRow[1] = sender.Info["modversion"];
-                            foundRow[2] = sender.Info["hostname"];
+                            foundRow[2] = TextOperations.ConvertToFlowDocument(sender.Info["hostname"]);
                             foundRow[3] = sender.Info["mapname"];
                             foundRow[4] = sender.Info["gametype"];
-                            foundRow[5] = sender.Info["clients"];
+                            foundRow[5] = (Convert.ToInt32(sender.Info["clients"]) - Convert.ToInt32(sender.Info["bots"])) + " + " + sender.Info["bots"];
                             foundRow[6] = sender.Info["sv_maxclients"];
                             foundRow[9] = (ushort)((sender.LastRecvTime - sender.LastSendTime).TotalMilliseconds);
+                            foundRow[10] = sender.Info["hostname"];
                         }
-                    }
+                    }*/
                 }
                 _tmpServers.Remove(sender.ToString());
 

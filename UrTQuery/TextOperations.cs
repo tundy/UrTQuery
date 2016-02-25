@@ -63,8 +63,7 @@ namespace UrTQuery
         }
         public static RichTextBox ConvertToRichTextBox(string text)
         {
-            var richTextBox = new RichTextBox { Document = ConvertToFlowDocument(text) };
-            return richTextBox;
+            return new RichTextBox { Document = ConvertToFlowDocument(text) };
         }
     }
 }
