@@ -1,7 +1,6 @@
 ﻿using System.Globalization;
 using System.Windows.Controls;
 using System.Windows.Media;
-using System.Linq;
 using System.Text;
 using System.Windows.Documents;
 
@@ -26,7 +25,7 @@ namespace UrTQuery
         public static Brush ConvertoToBrush(char c)
         {
             var Byte = Encoding.ASCII.GetBytes(c.ToString(CultureInfo.InvariantCulture));
-            return Colors[(Byte[0] + 2) % Colors.Count()];
+            return Colors[(Byte[0] + 2) % Colors.Length];
         }
 
         public static Paragraph ConvertToParagraph(string text)
@@ -38,7 +37,7 @@ namespace UrTQuery
             {
                 Foreground = Brushes.White
             });
-            for (var i = 1; i < tmp.Count(); i++)
+            for (var i = 1; i < tmp.Length; i++)
             {
                 if (tmp[i].Length <= 0)
                 {
