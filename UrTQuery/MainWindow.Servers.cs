@@ -49,7 +49,7 @@ namespace UrTQuery
             ServerListDataTable.Columns[0].AutoIncrementStep = 1;
             ServerListDataTable.Columns.Add("Version", typeof(string));
             //ServerListDataTable.Columns.Add("test", typeof(RichTextBox));
-            ServerListDataTable.Columns.Add("test", typeof(string));
+            ServerListDataTable.Columns.Add("Hostname", typeof(string));
             //ServerListDataTable.Columns[2].
             ServerListDataTable.Columns.Add("Map Name", typeof(string));
             ServerListDataTable.Columns.Add("Game Type", typeof(string));
@@ -58,7 +58,7 @@ namespace UrTQuery
             ServerListDataTable.Columns.Add("IP Address", typeof(string));
             ServerListDataTable.Columns.Add("Port", typeof(ushort));
             ServerListDataTable.Columns.Add("Ping", typeof(ushort));
-            ServerListDataTable.Columns.Add("Hostname", typeof(string));
+            //ServerListDataTable.Columns.Add("Hostname", typeof(string));
             ServerListDataTable.PrimaryKey = new[] { ServerListDataTable.Columns[7], ServerListDataTable.Columns[8] };
 
             ServerListDataGrid.ItemsSource = ServerListDataTable.DefaultView;

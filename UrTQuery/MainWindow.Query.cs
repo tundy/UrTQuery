@@ -187,8 +187,8 @@ namespace UrTQuery
                             sender.Info["sv_maxclients"],
                             sender.IP,
                             sender.Port,
-                            (ushort) ((sender.LastRecvTime - sender.LastSendTime).TotalMilliseconds),
-                            sender.Info["hostname"]
+                            (ushort) ((sender.LastRecvTime - sender.LastSendTime).TotalMilliseconds)
+                            //sender.Info["hostname"]
                             );
                     }
                     else
@@ -202,7 +202,7 @@ namespace UrTQuery
                                       " + " + sender.Info["bots"];
                         foundRow[6] = sender.Info["sv_maxclients"];
                         foundRow[9] = (ushort) ((sender.LastRecvTime - sender.LastSendTime).TotalMilliseconds);
-                        foundRow[10] = sender.Info["hostname"];
+                        //foundRow[10] = sender.Info["hostname"];
                     }
                     /*try
                     {
