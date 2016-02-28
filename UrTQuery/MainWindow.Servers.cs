@@ -48,7 +48,8 @@ namespace UrTQuery
             ServerListDataTable.Columns[0].AutoIncrementSeed = 1;
             ServerListDataTable.Columns[0].AutoIncrementStep = 1;
             ServerListDataTable.Columns.Add("Version", typeof(string));
-            ServerListDataTable.Columns.Add("test", typeof(FlowDocument));
+            //ServerListDataTable.Columns.Add("test", typeof(RichTextBox));
+            ServerListDataTable.Columns.Add("test", typeof(string));
             //ServerListDataTable.Columns[2].
             ServerListDataTable.Columns.Add("Map Name", typeof(string));
             ServerListDataTable.Columns.Add("Game Type", typeof(string));
@@ -82,7 +83,7 @@ namespace UrTQuery
             foreach (var server in _tmpServers.ToList())
             {
                 _mainQuery.GetInfo(server.Value.Ip, server.Value.Port);
-                if (server.Value.Attempts <= 10) continue;
+                if (server.Value.Attempts <= 5) continue;
                 _tmpServers.Remove(server.Key);
                 UpdateStatus();
             }

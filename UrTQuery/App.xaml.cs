@@ -19,14 +19,14 @@ namespace UrTQuery
                 MessageBox.Show("Quake Query Dll not found !", "Missing Dll", MessageBoxButton.OK, MessageBoxImage.Error);
                 Shutdown(-1);
             }
-            else if (System.String.Compare(FileVersionInfo.GetVersionInfo("QuakeQueryDll.dll").ProductVersion, "3.4.2.0", System.StringComparison.Ordinal) < 0)
+            else if (string.Compare(FileVersionInfo.GetVersionInfo("QuakeQueryDll.dll").ProductVersion, "3.4.3.2", System.StringComparison.Ordinal) < 0)
             {
                 MessageBox.Show("Quake Query Dll is too old !", "Wrong version", MessageBoxButton.OK, MessageBoxImage.Error);
                 Shutdown(-1);
             }
             else
             {
-                if (System.String.Compare(FileVersionInfo.GetVersionInfo("QuakeQueryDll.dll").ProductVersion, "3.4.4.3", System.StringComparison.Ordinal) != 0)
+                if (string.Compare(FileVersionInfo.GetVersionInfo("QuakeQueryDll.dll").ProductVersion, "3.5.0.1", System.StringComparison.Ordinal) != 0)
                     MessageBox.Show("Quake Query Dll is different than version that was used for compiling !", "Wrong version", MessageBoxButton.OK, MessageBoxImage.Warning);
                 //Re-enable normal shutdown mode.
                 Current.ShutdownMode = ShutdownMode.OnMainWindowClose;

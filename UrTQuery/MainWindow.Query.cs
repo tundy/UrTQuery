@@ -178,7 +178,8 @@ namespace UrTQuery
                         ServerListDataTable.Rows.Add(
                             null,
                             sender.Info["modversion"],
-                            TextOperations.ConvertToFlowDocument(sender.Info["hostname"]),
+                            //TextOperations.ConvertToRichTextBox(sender.Info["hostname"]),
+                            sender.Info["hostname"],
                             sender.Info["mapname"],
                             sender.Info["gametype"],
                             (Convert.ToInt32(sender.Info["clients"]) - Convert.ToInt32(sender.Info["bots"])) + " + " +
@@ -193,7 +194,8 @@ namespace UrTQuery
                     else
                     {
                         foundRow[1] = sender.Info["modversion"];
-                        foundRow[2] = TextOperations.ConvertToFlowDocument(sender.Info["hostname"]);
+                        //foundRow[2] = TextOperations.ConvertToFlowDocument(sender.Info["hostname"]);
+                        foundRow[2] = sender.Info["hostname"];
                         foundRow[3] = sender.Info["mapname"];
                         foundRow[4] = sender.Info["gametype"];
                         foundRow[5] = (Convert.ToInt32(sender.Info["clients"]) - Convert.ToInt32(sender.Info["bots"])) +
@@ -311,7 +313,7 @@ namespace UrTQuery
             }
 
     if (wasScrolledToEnd) Output.ScrollToEnd();
-            if (lastFocusedItem != null) lastFocusedItem.Focus();
+            lastFocusedItem?.Focus();
         }
         private void TestPassword_Click(object sender, RoutedEventArgs e)
         {
