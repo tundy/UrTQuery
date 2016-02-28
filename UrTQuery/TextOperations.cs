@@ -54,11 +54,24 @@ namespace UrTQuery
             return paragraph;
         }
 
-        public static FlowDocument ConvertToFlowDocument(string text)
+        public static FlowDocument ConvertToFlowDocument(Paragraph paragraph)
         {
             var flowDocument = new FlowDocument();
-            flowDocument.Blocks.Add(ConvertToParagraph(text));
+            flowDocument.Blocks.Add(paragraph);
             return flowDocument;
+        }
+        public static FlowDocument ConvertToFlowDocument(string text)
+        {
+            return ConvertToFlowDocument(ConvertToParagraph(text));
+        }
+
+        public static RichTextBox ConvertToRichTextBox(FlowDocument flowDocument)
+        {
+            return new RichTextBox { Document = flowDocument };
+        }
+        public static RichTextBox ConvertToRichTextBox(Paragraph paragraph)
+        {
+            return new RichTextBox { Document = ConvertToFlowDocument(paragraph) };
         }
         public static RichTextBox ConvertToRichTextBox(string text)
         {
