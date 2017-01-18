@@ -241,9 +241,9 @@ namespace UrTQuery
                 UpdateStatus();
             });
         }
-        # endregion
+        #endregion
 
-        # region Button_Clicks
+        #region Button_Clicks
         private void Send_Click(object sender, RoutedEventArgs e)
         {
             switch (Combo.SelectedIndex)
@@ -276,7 +276,7 @@ namespace UrTQuery
         }
         private void Clear_Click(object sender, RoutedEventArgs e)
         {
-            Output.Text = "";
+            Output.Text = string.Empty;
         }
         private void GetStatus_Click(object sender, RoutedEventArgs e)
         {
@@ -312,14 +312,14 @@ namespace UrTQuery
                 Output.AppendText(Environment.NewLine);
             }
 
-    if (wasScrolledToEnd) Output.ScrollToEnd();
+            if (wasScrolledToEnd) Output.ScrollToEnd();
             lastFocusedItem?.Focus();
         }
         private void TestPassword_Click(object sender, RoutedEventArgs e)
         {
             _mainQuery.Rcon(Rcon.Password, "echo \"Good rconpassword.\"", Ip, Port);
         }
-        #  endregion
+        #endregion
 
         private void Combo_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
@@ -344,8 +344,8 @@ namespace UrTQuery
         }
         private void NoSpaces_TextChanged(object sender, TextChangedEventArgs e)
         {
-            ((TextBox)sender).Text = ((TextBox)sender).Text.Replace(" ", "");
-            ((TextBox)sender).Text = ((TextBox)sender).Text.Replace("\t", "");
+            ((TextBox)sender).Text = ((TextBox)sender).Text.Replace(" ", string.Empty);
+            ((TextBox)sender).Text = ((TextBox)sender).Text.Replace("\t", string.Empty);
         }
         private void NumbersOnly_TextChanged(object sender, TextChangedEventArgs e)
         {

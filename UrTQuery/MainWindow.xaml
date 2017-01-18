@@ -153,11 +153,11 @@
                     </StackPanel>
                     <StackPanel Orientation="Horizontal" Grid.Row="0" Grid.Column="1" HorizontalAlignment="Right">
                         <Label Content="Done:"/>
-                        <TextBox Text="0" x:Name="Done" HorizontalAlignment="Left" TextWrapping="NoWrap" Margin="0,2,5,2" Width="45" MaxLength="4" VerticalContentAlignment="Center" Background="White" />
+                        <TextBox IsReadOnly="True" Text="0" x:Name="Done" HorizontalAlignment="Left" TextWrapping="NoWrap" Margin="0,2,5,2" Width="45" MaxLength="4" VerticalContentAlignment="Center" Background="White" />
                         <Label Content="Pending:"/>
-                        <TextBox Text="0" x:Name="Pending" HorizontalAlignment="Left" TextWrapping="NoWrap" Margin="0,2,5,2" Width="45" MaxLength="4" VerticalContentAlignment="Center" Background="White" />
+                        <TextBox IsReadOnly="True" Text="0" x:Name="Pending" HorizontalAlignment="Left" TextWrapping="NoWrap" Margin="0,2,5,2" Width="45" MaxLength="4" VerticalContentAlignment="Center" Background="White" />
                         <Label Content="Total:"/>
-                        <TextBox Text="0" x:Name="Total" HorizontalAlignment="Left" TextWrapping="NoWrap" Margin="0,2,5,2" Width="45" MaxLength="4" VerticalContentAlignment="Center" Background="White" />
+                        <TextBox IsReadOnly="True" Text="0" x:Name="Total" HorizontalAlignment="Left" TextWrapping="NoWrap" Margin="0,2,5,2" Width="45" MaxLength="4" VerticalContentAlignment="Center" Background="White" />
                     </StackPanel>
                     <DataGrid x:Name="ServerListDataGrid"
                         VirtualizingStackPanel.VirtualizationMode="Recycling"

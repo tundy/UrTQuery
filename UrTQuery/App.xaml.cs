@@ -1,4 +1,5 @@
-﻿using System.Diagnostics;
+﻿using System;
+using System.Diagnostics;
 using System.IO;
 using System.Windows;
 
@@ -11,6 +12,9 @@ namespace UrTQuery
     {
         private void Application_Startup(object sender, StartupEventArgs e)
         {
+            const string oldVersion = "3.4.3.2";
+            const string compiledVersion = "3.6.0.0";
+
             //Disable shutdown when the dialog closes
             Current.ShutdownMode = ShutdownMode.OnExplicitShutdown;
 
@@ -19,15 +23,15 @@ namespace UrTQuery
                 MessageBox.Show("Quake Query Dll not found !", "Missing Dll", MessageBoxButton.OK, MessageBoxImage.Error);
                 Shutdown(-1);
             }
-            else if (string.Compare(FileVersionInfo.GetVersionInfo("QuakeQueryDll.dll").ProductVersion, "3.4.3.2", System.StringComparison.Ordinal) < 0)
+            else if (string.Compare(FileVersionInfo.GetVersionInfo("QuakeQueryDll.dll").ProductVersion, oldVersion, StringComparison.Ordinal) < 0)
             {
-                MessageBox.Show("Quake Query Dll is too old !", "Wrong version", MessageBoxButton.OK, MessageBoxImage.Error);
+                MessageBox.Show($"Quake Query Dll is too old !{Environment.NewLine}You need at least version {oldVersion}.", "Wrong version", MessageBoxButton.OK, MessageBoxImage.Error);
                 Shutdown(-1);
             }
             else
             {
-                if (string.Compare(FileVersionInfo.GetVersionInfo("QuakeQueryDll.dll").ProductVersion, "3.5.0.1", System.StringComparison.Ordinal) != 0)
-                    MessageBox.Show("Quake Query Dll is different than version that was used for compiling !", "Wrong version", MessageBoxButton.OK, MessageBoxImage.Warning);
+                if (string.Compare(FileVersionInfo.GetVersionInfo("QuakeQueryDll.dll").ProductVersion, compiledVersion, StringComparison.Ordinal) != 0)
+                    MessageBox.Show($"Quake Query Dll is different than version that was used for compiling !{Environment.NewLine}Compiled with version {compiledVersion}", "Wrong version", MessageBoxButton.OK, MessageBoxImage.Warning);
                 //Re-enable normal shutdown mode.
                 Current.ShutdownMode = ShutdownMode.OnMainWindowClose;
                 var mainWindow = new MainWindow();

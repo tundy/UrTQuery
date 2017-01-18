@@ -45,6 +45,7 @@ namespace UrTQuery
             {Bomb, "Bomb"},
             {Jump, "Jump"},
             {Freeze, "Freeze"},
+            {Gun, "Gun"},
             {FFA.ToString(CultureInfo.InvariantCulture), "FFA"},
             {LMS.ToString(CultureInfo.InvariantCulture), "LMS"},
             {TDM.ToString(CultureInfo.InvariantCulture), "TDM"},

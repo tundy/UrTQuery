@@ -78,12 +78,15 @@ namespace UrTQuery
 
         private void _refreshTimer_Tick(object sender, EventArgs e)
         {
-            if (_tmpServers.Count == 0)
-                _refreshTimer.Stop();
+            if (_tmpServers.Count == 0) _refreshTimer.Stop();
             foreach (var server in _tmpServers.ToList())
             {
-                _mainQuery.GetInfo(server.Value.Ip, server.Value.Port);
-                if (server.Value.Attempts <= 5) continue;
+                //var foundRow = ServerListDataTable.Rows.Find(new object[] {server.Value.Ip, server.Value.Port});
+                //if (foundRow != null)
+                {
+                    _mainQuery.GetInfo(server.Value.Ip, server.Value.Port);
+                    if (server.Value.Attempts <= 5) continue;
+                }
                 _tmpServers.Remove(server.Key);
                 UpdateStatus();
             }
