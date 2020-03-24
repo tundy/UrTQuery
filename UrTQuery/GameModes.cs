@@ -33,6 +33,7 @@ namespace UrTQuery
             {Freeze.ToString(CultureInfo.InvariantCulture), "Freeze Tag"},
             {Gun.ToString(CultureInfo.InvariantCulture), "Gun Game"}
         };
+
         public static readonly Dictionary<object, string> ShortCuts = new Dictionary<object, string>
         {
             {FFA, "FFA"},

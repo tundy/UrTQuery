@@ -15,6 +15,7 @@ namespace UrTQuery
 
         private bool _showpassword;
         private string _password = string.Empty;
+
         public string Password
         {
             get { return _password; }
@@ -24,21 +25,25 @@ namespace UrTQuery
                 _password = value; PasswordShowed.Text = value; PasswordHidden.Password = value;
             }
         }
+
         public Brush BoxBackground
         {
             get { return PasswordHidden.Background; }
             set { PasswordHidden.Background = value; PasswordShowed.Background = value; }
         }
+
         public Brush BoxBorderBrush
         {
             get { return PasswordHidden.BorderBrush; }
             set { PasswordHidden.BorderBrush = value; PasswordShowed.BorderBrush = value; }
         }
+
         public string Text
         {
             get { return _password; }
             set { Password = value; }
         }
+
         public bool ShowPassword
         {
             get { return _showpassword; }
@@ -49,7 +54,7 @@ namespace UrTQuery
                 {
                     PasswordHidden.Visibility = Visibility.Collapsed;
                     PasswordShowed.Visibility = Visibility.Visible;
-                    PasswordShowed.Text = _password;               
+                    PasswordShowed.Text = _password;
                 }
                 else
                 {
@@ -70,6 +75,7 @@ namespace UrTQuery
             _password = PasswordShowed.Text;
             OnPasswordChange(e);
         }
+
         private void PasswordHidden_PasswordChanged(object sender, RoutedEventArgs e)
         {
             _password = PasswordHidden.Password;
@@ -78,11 +84,7 @@ namespace UrTQuery
 
         protected virtual void OnPasswordChange(EventArgs e)
         {
-            var handler = PasswordChanged;
-            if (handler != null)
-            {
-                handler(this, e);
-            }
+            PasswordChanged?.Invoke(this, e);
         }
     }
 }

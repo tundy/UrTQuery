@@ -39,10 +39,10 @@ namespace UrTQuery
             });
             for (var i = 1; i < tmp.Length; i++)
             {
-                if (tmp[i].Length <= 0)
+                if (tmp[i].Length == 0)
                 {
                     var j = 1;
-                    while (tmp[i + j].Length <= 0) j++;
+                    while (tmp[i + j].Length == 0) j++;
                     tmp[i + j] = tmp[i + j].Insert(0, "^");
                     continue;
                 }
@@ -60,6 +60,7 @@ namespace UrTQuery
             flowDocument.Blocks.Add(paragraph);
             return flowDocument;
         }
+
         public static FlowDocument ConvertToFlowDocument(string text)
         {
             return ConvertToFlowDocument(ConvertToParagraph(text));
@@ -69,10 +70,12 @@ namespace UrTQuery
         {
             return new RichTextBox { Document = flowDocument };
         }
+
         public static RichTextBox ConvertToRichTextBox(Paragraph paragraph)
         {
             return new RichTextBox { Document = ConvertToFlowDocument(paragraph) };
         }
+
         public static RichTextBox ConvertToRichTextBox(string text)
         {
             return new RichTextBox { Document = ConvertToFlowDocument(text) };

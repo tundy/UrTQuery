@@ -16,6 +16,7 @@ namespace UrTQuery
     {
         private readonly Dictionary<string, TmpServer> _tmpServers = new Dictionary<string, TmpServer>();
         private static readonly DataTable ServerListDataTable = new DataTable();
+
         private class TmpServer
         {
             private ushort _atempts;
@@ -40,6 +41,7 @@ namespace UrTQuery
                 e.Column = templateColumn;
             }
         }
+
         private void _ServerListDataInit()
         {
             ServerListDataTable.TableName = "_serverListDataTable";
@@ -63,7 +65,7 @@ namespace UrTQuery
 
             ServerListDataGrid.ItemsSource = ServerListDataTable.DefaultView;
         }
-        
+
         private void UpdateStatus()
         {
             Dispatcher.Invoke(() =>
@@ -114,12 +116,12 @@ namespace UrTQuery
                 _mainQuery.Master(Dns.GetHostAddresses("master.urbanterror.info")[0], 27900, 68, true, true);
                 _mainQuery.Send("", Ip, Port);
             }
-            catch (SocketException ex)
+            catch (SocketException ex) when (ex.SocketErrorCode == SocketError.HostNotFound)
             {
-                if (ex.SocketErrorCode != SocketError.HostNotFound)
-                    throw;
+                // Ignore this one & throw others.
             }
         }
+
         private void Refresh_Click(object sender, RoutedEventArgs e)
         {
             _refreshTimer.Stop();
@@ -156,11 +158,13 @@ namespace UrTQuery
             ((DataGrid)sender).CurrentItem = null;
             if (e != null) e.Handled = true;
         }
+
         private void Info_RightClick(object sender, RoutedEventArgs e)
         {
             var currentRow = ((DataRowView)ServerListDataGrid.CurrentItem).Row;
             _mainQuery.GetInfo(currentRow[7].ToString(), ushort.Parse(currentRow[8].ToString()));
         }
+
         private void Status_RightClick(object sender, RoutedEventArgs e)
         {
             _ServerListDataGrid_MouseDoubleClick(ServerListDataGrid, null);

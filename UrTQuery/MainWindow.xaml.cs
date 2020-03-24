@@ -37,12 +37,10 @@ namespace UrTQuery
                 _mainQuery.Master(Dns.GetHostAddresses("master.urbanterror.info")[0], 27900, 68, true, true);
                 _mainQuery.Send("", Ip, Port);
             }
-            catch (SocketException ex)
+            catch (SocketException ex) when (ex.SocketErrorCode == SocketError.HostNotFound)
             {
-                if (ex.SocketErrorCode != SocketError.HostNotFound)
-                    throw;
+                // Ignore this one & throw others.
             }
-
         }
 
         private void MainWindow_Closing(object sender, CancelEventArgs e)

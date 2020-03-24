@@ -48,6 +48,7 @@ namespace UrTQuery
             }
             set { Address.Text = value.ToString(); }
         }
+
         internal ushort Port
         {
             get
@@ -81,6 +82,7 @@ namespace UrTQuery
             message += Environment.NewLine + "Address is set to the Default value 127.0.0.1";
             MessageBox.Show(message, "Default IP Adress", MessageBoxButton.OK, MessageBoxImage.Exclamation);
         }
+
         private void SetLocalPort(string message)
         {
             Port = 27960;
@@ -100,6 +102,7 @@ namespace UrTQuery
                 }
             });
         }
+
         private void _MainQuery_printResponseEvent(Server sender)
         {
             Dispatcher.Invoke(() =>
@@ -117,6 +120,7 @@ namespace UrTQuery
                 lastFocusedItem?.Focus();
             });
         }
+
         private void _MainQuery_statusResponseEvent(Server sender)
         {
             Dispatcher.Invoke(() =>
@@ -137,6 +141,7 @@ namespace UrTQuery
                 lastFocusedItem?.Focus();
             });
         }
+
         private void _MainQuery_infoResponseEvent(Server sender)
         {
             Dispatcher.Invoke(() =>
@@ -169,7 +174,7 @@ namespace UrTQuery
                     var tmp = GameModes.LongNames[sender.Info["gametype"]];
                     sender.Info["gametype"] = tmp;
                 }
-                
+
                 if (sender.Info["game"].Equals("q3ut4"))
                 {
                     var foundRow = ServerListDataTable.Rows.Find(new object[] { sender.IP, sender.Port });
@@ -274,18 +279,22 @@ namespace UrTQuery
                     break;
             }
         }
+
         private void Clear_Click(object sender, RoutedEventArgs e)
         {
             Output.Text = string.Empty;
         }
+
         private void GetStatus_Click(object sender, RoutedEventArgs e)
         {
             _mainQuery.GetStatus(Ip, Port);
         }
+
         private void GetInfo_Click(object sender, RoutedEventArgs e)
         {
             _mainQuery.GetInfo(Ip, Port);
         }
+
         private void RconStatus_Click(object sender, RoutedEventArgs e)
         {
             _mainQuery.Rcon(Rcon.Password, "status", Ip, Port);
@@ -315,6 +324,7 @@ namespace UrTQuery
             if (wasScrolledToEnd) Output.ScrollToEnd();
             lastFocusedItem?.Focus();
         }
+
         private void TestPassword_Click(object sender, RoutedEventArgs e)
         {
             _mainQuery.Rcon(Rcon.Password, "echo \"Good rconpassword.\"", Ip, Port);
@@ -334,19 +344,23 @@ namespace UrTQuery
                 Input.Width = 205;
             }
         }
+
         private void ShowRcon_Checked(object sender, EventArgs e)
         {
             Rcon.ShowPassword = true;
         }
+
         private void ShowRcon_Unchecked(object sender, EventArgs e)
         {
             Rcon.ShowPassword = false;
         }
+
         private void NoSpaces_TextChanged(object sender, TextChangedEventArgs e)
         {
             ((TextBox)sender).Text = ((TextBox)sender).Text.Replace(" ", string.Empty);
             ((TextBox)sender).Text = ((TextBox)sender).Text.Replace("\t", string.Empty);
         }
+
         private void NumbersOnly_TextChanged(object sender, TextChangedEventArgs e)
         {
             ((TextBox)sender).Text = new string(((TextBox)sender).Text.Where(char.IsDigit).ToArray());
